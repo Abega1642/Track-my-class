@@ -1,4 +1,4 @@
-package dev.razafindratelo.trackmyclass.entity;
+package dev.razafindratelo.trackmyclass.entity.course;
 
 import lombok.Getter;
 import lombok.Setter;
