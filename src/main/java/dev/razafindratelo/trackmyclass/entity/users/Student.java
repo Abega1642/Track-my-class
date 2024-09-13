@@ -1,7 +1,7 @@
 package dev.razafindratelo.trackmyclass.entity.users;
 
-import dev.razafindratelo.trackmyclass.entity.enums.Group;
-import dev.razafindratelo.trackmyclass.entity.enums.Level;
+import dev.razafindratelo.trackmyclass.entity.users.enums.Group;
+import dev.razafindratelo.trackmyclass.entity.users.enums.Level;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.ArrayList;
