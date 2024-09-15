@@ -1,7 +1,7 @@
 package dev.razafindratelo.trackmyclass.entity.matchers;
 
+import dev.razafindratelo.trackmyclass.dto.StudentDTO;
 import dev.razafindratelo.trackmyclass.entity.attendances.Attendance;
-import dev.razafindratelo.trackmyclass.entity.users.Student;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AttendanceMatcher {
-    private Student student;
+    private StudentDTO student;
     private Attendance attendance;
 }

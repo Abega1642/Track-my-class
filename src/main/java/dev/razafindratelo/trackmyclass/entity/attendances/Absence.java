@@ -1,5 +1,6 @@
 package dev.razafindratelo.trackmyclass.entity.attendances;
 
+import dev.razafindratelo.trackmyclass.dto.TeacherDTO;
 import dev.razafindratelo.trackmyclass.entity.course.Course;
 import dev.razafindratelo.trackmyclass.entity.users.Teacher;
 import lombok.Getter;
@@ -15,7 +16,7 @@ public class Absence extends Attendance {
     public Absence(
             LocalDateTime commencement,
             LocalDateTime termination,
-            Teacher attendanceResponsible,
+            TeacherDTO attendanceResponsible,
             Course course,
             boolean isJustified
     ) {
@@ -26,7 +27,7 @@ public class Absence extends Attendance {
     public Absence(
             LocalDateTime commencement,
             LocalDateTime termination,
-            Teacher attendanceResponsible,
+            TeacherDTO attendanceResponsible,
             Course course
     ) {
         super(commencement, termination, attendanceResponsible, course);

@@ -1,7 +1,7 @@
 package dev.razafindratelo.trackmyclass.entity.matchers;
 
+import dev.razafindratelo.trackmyclass.dto.StudentDTO;
 import dev.razafindratelo.trackmyclass.entity.attendances.Delay;
-import dev.razafindratelo.trackmyclass.entity.users.Student;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DelayMatcher{
-    private Student student;
+    private StudentDTO student;
     private Delay delay;
 
 }
