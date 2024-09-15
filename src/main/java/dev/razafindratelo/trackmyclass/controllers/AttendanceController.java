@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 public class AttendanceController {
-    @GetMapping("/test")
+    @GetMapping("/student/attendances")
     public ResponseEntity<List<AttendanceMatcher>> test() {
         var db = new DBConnection();
         var att = new AttendanceDAO(db);
