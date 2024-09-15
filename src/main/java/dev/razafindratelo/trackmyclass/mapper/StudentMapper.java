@@ -1,15 +1,14 @@
 package dev.razafindratelo.trackmyclass.mapper;
 
-import dev.razafindratelo.trackmyclass.entity.users.Student;
+import dev.razafindratelo.trackmyclass.dto.StudentDTO;
 import dev.razafindratelo.trackmyclass.entity.users.enums.Group;
 import dev.razafindratelo.trackmyclass.entity.users.enums.Level;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class StudentMapper {
-    public static Student mapToStudent(ResultSet resultSet) throws SQLException {
-        return new Student(
+    public static StudentDTO mapToStudentDTO(ResultSet resultSet) throws SQLException {
+        return new StudentDTO(
                 resultSet.getString("std_ref"),
                 resultSet.getString("student_last_name"),
                 resultSet.getString("student_first_name"),
