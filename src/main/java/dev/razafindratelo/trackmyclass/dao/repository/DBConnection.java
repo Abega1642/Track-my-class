@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class DBConnection {
     private final String url = "jdbc:postgresql://localhost:5432/track_my_class";
     private final String user = "postgres";
-    private final String password = "xxxx";
+    private final String password = "razafindratelo";
 
     private Connection connection;
 

@@ -1,6 +1,8 @@
 package dev.razafindratelo.trackmyclass.dao;
 
 import dev.razafindratelo.trackmyclass.dao.repository.DBConnection;
+import dev.razafindratelo.trackmyclass.dto.StudentDTO;
+import dev.razafindratelo.trackmyclass.dto.TeacherDTO;
 import dev.razafindratelo.trackmyclass.entity.attendances.Attendance;
 import dev.razafindratelo.trackmyclass.entity.course.Course;
 import dev.razafindratelo.trackmyclass.entity.matchers.AttendanceMatcher;
@@ -62,8 +64,8 @@ public class AttendanceDAO {
             getAll.execute();
             ResultSet resultSet = getAll.getResultSet();
             while (resultSet.next()) {
-                Student student = StudentMapper.mapToStudent(resultSet);
-                Teacher teacher = TeacherMapper.mapToTeacher(resultSet);
+                StudentDTO student = StudentMapper.mapToStudentDTO(resultSet);
+                TeacherDTO teacher = TeacherMapper.mapToTeacherDTO(resultSet);
                 Course course = CourseMapper.mapToCourse(resultSet);
                 attendances.add(
                         new AttendanceMatcher(
@@ -119,8 +121,8 @@ public class AttendanceDAO {
             getById.execute();
             ResultSet resultSet = getById.getResultSet();
             while (resultSet.next()) {
-                Student student = StudentMapper.mapToStudent(resultSet);
-                Teacher teacher = TeacherMapper.mapToTeacher(resultSet);
+                StudentDTO student = StudentMapper.mapToStudentDTO(resultSet);
+                TeacherDTO teacher = TeacherMapper.mapToTeacherDTO(resultSet);
                 Course course = CourseMapper.mapToCourse(resultSet);
 
                 attendances.add(

@@ -1,21 +1,19 @@
 package dev.razafindratelo.trackmyclass.dao;
 
 import dev.razafindratelo.trackmyclass.dao.repository.DBConnection;
+import dev.razafindratelo.trackmyclass.dto.StudentDTO;
+import dev.razafindratelo.trackmyclass.dto.TeacherDTO;
 import dev.razafindratelo.trackmyclass.entity.attendances.Delay;
 import dev.razafindratelo.trackmyclass.entity.course.Course;
 import dev.razafindratelo.trackmyclass.entity.matchers.DelayMatcher;
-import dev.razafindratelo.trackmyclass.entity.users.Student;
-import dev.razafindratelo.trackmyclass.entity.users.Teacher;
 import dev.razafindratelo.trackmyclass.mapper.CourseMapper;
 import dev.razafindratelo.trackmyclass.mapper.StudentMapper;
 import dev.razafindratelo.trackmyclass.mapper.TeacherMapper;
 import lombok.Getter;
 import org.springframework.stereotype.Repository;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,8 +65,8 @@ public class DelayDAO {
             ResultSet resultSet = getAll.getResultSet();
 
             while(resultSet.next()) {
-                Student student = StudentMapper.mapToStudent(resultSet);
-                Teacher teacher = TeacherMapper.mapToTeacher(resultSet);
+                StudentDTO student = StudentMapper.mapToStudentDTO(resultSet);
+                TeacherDTO teacher = TeacherMapper.mapToTeacherDTO(resultSet);
                 Course course = CourseMapper.mapToCourse(resultSet);
 
                 delays.add(
@@ -89,10 +87,5 @@ public class DelayDAO {
             System.out.println("Error while retrieving delays : " + e.getMessage());
         }
         return delays;
-    }
-
-    public static void main(String[] args) {
-        var delayDAO = new DelayDAO(new DBConnection());
-        System.out.println(delayDAO.getAllDelays());
     }
 }
