@@ -1,8 +1,5 @@
 package dev.razafindratelo.trackmyclass.entity.users;
 
-import dev.razafindratelo.trackmyclass.entity.attendances.Absence;
-import dev.razafindratelo.trackmyclass.entity.attendances.Attendance;
-import dev.razafindratelo.trackmyclass.entity.attendances.Delay;
 import dev.razafindratelo.trackmyclass.entity.users.enums.Group;
 import dev.razafindratelo.trackmyclass.entity.users.enums.Level;
 import lombok.Getter;
