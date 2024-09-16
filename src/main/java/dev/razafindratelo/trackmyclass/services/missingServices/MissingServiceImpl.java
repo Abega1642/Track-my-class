@@ -65,4 +65,10 @@ public class MissingServiceImpl implements MissingService {
         return missingDAO.getStudentNonJustifiedMissingThisMonth(student);
     }
 
+    @Override
+    public MissingMatcher findJustifiedMissingByStudentRef(String studentRef) {
+        Student student = studentDAO.getStudentById(studentRef);
+        return missingDAO.getStudentJustifiedMissing(student);
+    }
+
 }

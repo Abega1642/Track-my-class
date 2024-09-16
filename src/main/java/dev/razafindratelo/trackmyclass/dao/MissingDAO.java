@@ -114,6 +114,17 @@ public class MissingDAO {
         List<Missing> missing = missingMatcher.getMissingList()
                 .stream().filter(mis -> !mis.isJustified())
                 .toList();
+        missing.forEach(System.out::println);
+        missingMatcher.setMissingList(missing);
+        return missingMatcher;
+    }
+
+    public MissingMatcher getStudentJustifiedMissing(Student student) {
+        MissingMatcher missingMatcher = getMissingByStudent(student);
+        List<Missing> missing = missingMatcher.getMissingList()
+                .stream().filter(mis -> mis.isJustified())
+                .toList();
+        missing.forEach(System.out::println);
         missingMatcher.setMissingList(missing);
         return missingMatcher;
     }

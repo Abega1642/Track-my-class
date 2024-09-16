@@ -2,9 +2,11 @@ package dev.razafindratelo.trackmyclass.entity.course;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class Course {
     private String courseRef;
     private String name;

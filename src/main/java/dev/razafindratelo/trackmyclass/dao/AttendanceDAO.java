@@ -71,7 +71,7 @@ public class AttendanceDAO {
                 );
             }
 
-            attendanceMatcher.setAttendance(attendances);
+            attendanceMatcher.setAttendances(attendances);
         } catch(SQLException e) {
             System.out.println("Error while retrieving attendances by student ref: " + e.getMessage());
         }

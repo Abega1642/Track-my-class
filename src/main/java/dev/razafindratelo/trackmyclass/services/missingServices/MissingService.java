@@ -16,6 +16,8 @@ public interface MissingService {
 
     MissingMatcher findNonJustifiedMissingByStudentRef(String studentRef);
 
+    MissingMatcher findJustifiedMissingByStudentRef(String studentRef);
+
     MissingMatcher findMissingByStudentRefThisMonth(String studentRef);
 
     MissingMatcher findNonJustifiedMissingByStudentRefThisMonth(String studentRef);
