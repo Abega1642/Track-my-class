@@ -9,5 +9,5 @@ import java.util.List;
 public interface AttendanceService {
     List<AttendanceMatcher> findAllAttendances();
 
-    List<AttendanceMatcher> findAttendancesByStudentRef(String studentRef);
+    AttendanceMatcher findAttendancesByStudentRef(String studentRef);
 }
