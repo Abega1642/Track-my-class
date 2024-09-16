@@ -4,12 +4,14 @@ import dev.razafindratelo.trackmyclass.entity.attendances.Delay;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class DelayMatcher extends AbstrAttendanceMatcher {
-    private Delay delay;
+    private List<Delay> delay;
 
-    public DelayMatcher(Student student, Delay delay) {
+    public DelayMatcher(Student student, List<Delay> delay) {
         super(student);
         this.delay = delay;
     }

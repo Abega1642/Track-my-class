@@ -9,5 +9,5 @@ import java.util.List;
 public interface DelayService {
     List<DelayMatcher> findAllDelays();
 
-    List<DelayMatcher> findDelaysByStudentRef(String studentRef);
+    DelayMatcher findDelaysByStudentRef(String studentRef);
 }
