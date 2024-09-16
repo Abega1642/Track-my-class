@@ -8,6 +8,8 @@ import dev.razafindratelo.trackmyclass.services.studentServices.StudentService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,7 +21,14 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public List<AttendanceMatcher> findAllAttendances() {
-        return attendanceDAO.getAllAttendance();
+        List<String> stds = studentDAO.getAllStudentRef();
+        List<AttendanceMatcher> attendances = new ArrayList<>();
+
+        for (String std : stds) {
+            Student student = studentDAO.getStudentById(std);
+            attendances.add(attendanceDAO.getAttendanceByStudent(student));
+        }
+        return attendances;
     }
 
     @Override
