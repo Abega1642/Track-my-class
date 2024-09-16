@@ -9,10 +9,10 @@ import java.util.List;
 @Getter
 @Setter
 public class AttendanceMatcher extends AbstrAttendanceMatcher{
-    private List<Attendance> attendance;
+    private List<Attendance> attendances;
 
-    public AttendanceMatcher(Student student, List<Attendance> attendance) {
+    public AttendanceMatcher(Student student, List<Attendance> attendances) {
         super(student);
-        this.attendance = attendance;
+        this.attendances = attendances;
     }
 }

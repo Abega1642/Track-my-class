@@ -9,10 +9,10 @@ import java.util.List;
 @Getter
 @Setter
 public class DelayMatcher extends AbstrAttendanceMatcher {
-    private List<Delay> delay;
+    private List<Delay> delays;
 
-    public DelayMatcher(Student student, List<Delay> delay) {
+    public DelayMatcher(Student student, List<Delay> delays) {
         super(student);
-        this.delay = delay;
+        this.delays = delays;
     }
 }
