@@ -2,15 +2,17 @@ package dev.razafindratelo.trackmyclass.entity.matchers;
 
 import dev.razafindratelo.trackmyclass.entity.attendances.Attendance;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class AttendanceMatcher {
-    private Student student;
+@Getter
+@Setter
+public class AttendanceMatcher extends AbstrAttendanceMatcher{
     private List<Attendance> attendance;
+
+    public AttendanceMatcher(Student student, List<Attendance> attendance) {
+        super(student);
+        this.attendance = attendance;
+    }
 }
