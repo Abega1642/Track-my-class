@@ -20,6 +20,6 @@ public class DelayServiceImpl implements DelayService {
 
     @Override
     public List<DelayMatcher> findDelaysByStudentRef(String studentRef) {
-        return List.of();
+        return delayDAO.getDelaysByStudentId(studentRef);
     }
 }
