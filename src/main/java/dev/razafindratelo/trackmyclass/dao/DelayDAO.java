@@ -25,6 +25,27 @@ import java.util.List;
 public class DelayDAO {
     private final DBConnection dbConnection;
 
+    private void listMaker(List<DelayMatcher> delays, ResultSet resultSet) throws SQLException {
+        while(resultSet.next()) {
+            StudentDTO student = StudentMapper.mapToStudentDTO(resultSet);
+            TeacherDTO teacher = TeacherMapper.mapToTeacherDTO(resultSet);
+            Course course = CourseMapper.mapToCourse(resultSet);
+
+            delays.add(
+                    new DelayMatcher(
+                            student,
+                            new Delay(
+                                    resultSet.getObject("commencement", LocalDateTime.class),
+                                    resultSet.getObject("termination", LocalDateTime.class),
+                                    teacher,
+                                    course,
+                                    resultSet.getObject("lateness", LocalDateTime.class)
+                            )
+                    )
+            );
+        }
+    }
+
     public List<DelayMatcher> getAllDelays() {
         List<DelayMatcher> delays = new ArrayList<>();
         try {
@@ -116,26 +137,5 @@ public class DelayDAO {
             System.out.println("Error while retrieving delays by student ref: " + e.getMessage());
         }
         return delays;
-    }
-
-    private void listMaker(List<DelayMatcher> delays, ResultSet resultSet) throws SQLException {
-        while(resultSet.next()) {
-            StudentDTO student = StudentMapper.mapToStudentDTO(resultSet);
-            TeacherDTO teacher = TeacherMapper.mapToTeacherDTO(resultSet);
-            Course course = CourseMapper.mapToCourse(resultSet);
-
-            delays.add(
-                    new DelayMatcher(
-                            student,
-                            new Delay(
-                                    resultSet.getObject("commencement", LocalDateTime.class),
-                                    resultSet.getObject("termination", LocalDateTime.class),
-                                    teacher,
-                                    course,
-                                    resultSet.getObject("lateness", LocalDateTime.class)
-                            )
-                    )
-            );
-        }
     }
 }
