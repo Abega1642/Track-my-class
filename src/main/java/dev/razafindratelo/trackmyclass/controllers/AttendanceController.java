@@ -19,7 +19,7 @@ public class AttendanceController {
     }
 
     @GetMapping("/student/{std}/attendances")
-    public ResponseEntity<List<AttendanceMatcher>> getAttendancesById(
+    public ResponseEntity<AttendanceMatcher> getAttendancesById(
             @PathVariable("std") String std) {
         return ResponseEntity.ok(attendanceService.findAttendancesByStudentRef(std));
     }
