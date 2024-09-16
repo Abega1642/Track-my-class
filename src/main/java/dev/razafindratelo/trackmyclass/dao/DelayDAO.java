@@ -71,7 +71,7 @@ public class DelayDAO {
                         )
                 );
             }
-            delayMatcher.setDelay(delays);
+            delayMatcher.setDelays(delays);
         } catch (SQLException e) {
             System.out.println("Error while retrieving delays by student ref: " + e.getMessage());
         }

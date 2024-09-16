@@ -87,10 +87,11 @@ public class MissingDAO {
 
     public MissingMatcher getStudentMissingByCourseThisMonth(Student student, String courseName) {
         MissingMatcher missingMatcher = getMissingByStudent(student);
+        LocalDateTime date = LocalDateTime.now();
         List<Missing> missing = missingMatcher.getMissingList()
                 .stream().filter(mis ->
                         mis.getCourse().getName().equalsIgnoreCase(courseName)
-                                && checkMissingMonth(mis, LocalDateTime.now().getMonthValue()))
+                                && checkMissingMonth(mis, date.getMonthValue(), date.getYear()))
                 .toList();
         missingMatcher.setMissingList(missing);
         return missingMatcher;
@@ -98,9 +99,10 @@ public class MissingDAO {
 
     public MissingMatcher getStudentMissingOfThisMonth(Student student) {
         MissingMatcher missingMatcher = getMissingByStudent(student);
+        LocalDateTime date = LocalDateTime.now();
         List<Missing> missing = missingMatcher.getMissingList()
                 .stream().filter(
-                        mis -> checkMissingMonth(mis, LocalDateTime.now().getMonthValue())
+                        mis -> checkMissingMonth(mis, date.getMonthValue(), date.getYear())
                 )
                 .toList();
         missingMatcher.setMissingList(missing);
