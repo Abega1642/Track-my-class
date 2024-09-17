@@ -122,7 +122,7 @@ public class MissingDAO {
     public MissingMatcher getStudentJustifiedMissing(Student student) {
         MissingMatcher missingMatcher = getMissingByStudent(student);
         List<Missing> missing = missingMatcher.getMissingList()
-                .stream().filter(mis -> mis.isJustified())
+                .stream().filter(Missing::isJustified)
                 .toList();
         missing.forEach(System.out::println);
         missingMatcher.setMissingList(missing);
@@ -134,18 +134,9 @@ public class MissingDAO {
         LocalDateTime date = LocalDateTime.now();
         List<Missing> missing = missingMatcher.getMissingList()
                 .stream().filter(mis ->
-                        !mis.isJustified() && checkMissingMonth(mis, date.getMonthValue(), date.getYear()))
-                .toList();
-        missingMatcher.setMissingList(missing);
-        return missingMatcher;
-    }
-
-    public MissingMatcher getStudentNonJustifiedMissingAt(Student student, int month, int year) {
-        MissingMatcher missingMatcher = getMissingByStudent(student);
-        List<Missing> missing = missingMatcher.getMissingList()
-                .stream().filter(mis ->
                         !mis.isJustified()
-                                && checkMissingMonth(mis, month, year))
+                        && checkMissingMonth(mis, date.getMonthValue(), date.getYear())
+                )
                 .toList();
         missingMatcher.setMissingList(missing);
         return missingMatcher;

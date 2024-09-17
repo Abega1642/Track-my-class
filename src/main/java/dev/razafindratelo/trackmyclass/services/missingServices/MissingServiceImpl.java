@@ -2,12 +2,13 @@ package dev.razafindratelo.trackmyclass.services.missingServices;
 
 import dev.razafindratelo.trackmyclass.dao.MissingDAO;
 import dev.razafindratelo.trackmyclass.dao.StudentDAO;
-import dev.razafindratelo.trackmyclass.entity.matchers.DelayMatcher;
+import dev.razafindratelo.trackmyclass.entity.attendances.Missing;
 import dev.razafindratelo.trackmyclass.entity.matchers.MissingMatcher;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,45 +31,94 @@ public class MissingServiceImpl implements MissingService {
     }
 
     @Override
-    public MissingMatcher findMissingByStudentRef(String studentRef) {
+    public MissingMatcher findMissingByStudent(String studentRef, String condition) {
         Student student = studentDAO.getStudentById(studentRef);
-        return missingDAO.getMissingByStudent(student);
+        if(condition == null) {
+            return missingDAO.getMissingByStudent(student);
+        } else {
+            if(condition.equalsIgnoreCase("yes")
+                    || condition.equalsIgnoreCase("y")) {
+                return missingDAO.getStudentJustifiedMissing(student);
+
+            } else if (condition.equalsIgnoreCase("no")
+                    || condition.equalsIgnoreCase("n")) {
+                return missingDAO.getStudentNonJustifiedMissingThisMonth(student);
+
+            } else {
+                return missingDAO.getMissingByStudent(student);
+            }
+        }
+    }
+
+    public MissingMatcher findAllStudentMissingByCourse(String studentRef, String courseName, String condition) {
+        Student student = studentDAO.getStudentById(studentRef);
+        MissingMatcher res = null;
+        if(condition != null) {
+            if(condition.equalsIgnoreCase("yes")
+                    || condition.equalsIgnoreCase("y")) {
+                res = missingDAO.getStudentJustifiedMissing(student);
+                List<Missing> missing = res.getMissingList()
+                        .stream().filter(mis -> mis.getCourse().getName().equalsIgnoreCase(courseName))
+                        .toList();
+                res.setMissingList(missing);
+                return res;
+            } else if (condition.equalsIgnoreCase("no")
+                    || condition.equalsIgnoreCase("n")) {
+                res = missingDAO.getStudentNonJustifiedMissing(student);
+                List<Missing> missing = res.getMissingList()
+                        .stream().filter(mis -> mis.getCourse().getName().equalsIgnoreCase(courseName))
+                        .toList();
+                res.setMissingList(missing);
+
+                return res;
+            } else {
+                return missingDAO.getStudentMissingByCourse(student, courseName);
+            }
+        } else {
+            return missingDAO.getStudentMissingByCourse(student, courseName);
+        }
     }
 
     @Override
-    public MissingMatcher findStudentMissingByCourseRef(String studentRef, String courseName) {
-        Student student = studentDAO.getStudentById(studentRef);
-        return missingDAO.getStudentMissingByCourse(student, courseName);
-    }
+    public MissingMatcher findStudentMissingByCourse(
+            String studentRef,
+            String courseName,
+            Integer month,
+            Integer year,
+            String condition
+    ) {
+        MissingMatcher res = findAllStudentMissingByCourse(studentRef, courseName, condition);
+        List<Missing> missing = res.getMissingList();
+        if(month == null && year == null) {
+            missing = missing
+                    .stream().filter(
+                            mis -> mis.getCommencement().getMonthValue()== LocalDateTime.now().getMonthValue()
+                                    && mis.getCommencement().getYear() == LocalDateTime.now().getYear()
+                    ).toList();
+            res.setMissingList(missing);
 
-    @Override
-    public MissingMatcher findStudentMissingByCourseRefThisMonth(String studentRef, String courseName) {
-        Student student = studentDAO.getStudentById(studentRef);
-        return missingDAO.getStudentMissingByCourseThisMonth(student, courseName);
+        } else if (month == null) {
+            missing = missing
+                    .stream().filter(
+                            mis -> mis.getCommencement().getMonthValue()== LocalDateTime.now().getMonthValue()
+                                    && mis.getCommencement().getYear() == year
+                    ).toList();
+            res.setMissingList(missing);
+        } else if (year == null) {
+            missing = missing
+                    .stream().filter(
+                            mis -> mis.getCommencement().getMonthValue()== month
+                                    && mis.getCommencement().getYear() == LocalDateTime.now().getYear()
+                    ).toList();
+            res.setMissingList(missing);
+        } else {
+            missing = missing
+                    .stream().filter(
+                            mis -> mis.getCommencement().getMonthValue()== month
+                                    && mis.getCommencement().getYear() == year
+                    ).toList();
+        }
+        res.setMissingList(missing);
+        return res;
     }
-
-    @Override
-    public MissingMatcher findNonJustifiedMissingByStudentRef(String studentRef) {
-        Student student = studentDAO.getStudentById(studentRef);
-        return missingDAO.getStudentNonJustifiedMissing(student);
-    }
-
-    @Override
-    public MissingMatcher findMissingByStudentRefThisMonth(String studentRef) {
-        Student student = studentDAO.getStudentById(studentRef);
-        return missingDAO.getStudentMissingOfThisMonth(student);
-    }
-
-    @Override
-    public MissingMatcher findNonJustifiedMissingByStudentRefThisMonth(String studentRef) {
-        Student student = studentDAO.getStudentById(studentRef);
-        return missingDAO.getStudentNonJustifiedMissingThisMonth(student);
-    }
-
-    @Override
-    public MissingMatcher findJustifiedMissingByStudentRef(String studentRef) {
-        Student student = studentDAO.getStudentById(studentRef);
-        return missingDAO.getStudentJustifiedMissing(student);
-    }
-
 }

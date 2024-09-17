@@ -8,17 +8,7 @@ import java.util.List;
 public interface MissingService {
     List<MissingMatcher> findAllMissing();
 
-    MissingMatcher findMissingByStudentRef(String studentRef);
+    MissingMatcher findStudentMissingByCourse(String studentRef, String courseName, Integer month, Integer year, String condition);
 
-    MissingMatcher findStudentMissingByCourseRef(String studentRef, String courseName);
-
-    MissingMatcher findStudentMissingByCourseRefThisMonth(String studentRef, String courseName);
-
-    MissingMatcher findNonJustifiedMissingByStudentRef(String studentRef);
-
-    MissingMatcher findJustifiedMissingByStudentRef(String studentRef);
-
-    MissingMatcher findMissingByStudentRefThisMonth(String studentRef);
-
-    MissingMatcher findNonJustifiedMissingByStudentRefThisMonth(String studentRef);
+    MissingMatcher findMissingByStudent(String studentRef, String condition);
 }
