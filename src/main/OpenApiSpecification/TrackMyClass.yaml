@@ -1,0 +1,125 @@
+openapi: "3.0.3"
+info:
+  title: Track My Class API
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8080
+paths:
+  /student/missing:
+    get:
+      tags:
+        - Missing
+      operationId: findAllMissing
+      summary: get all missing available
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MissingMatcher"
+
+
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        userRef:
+          type: string
+          example: "STD23028"
+        lastName:
+          type: string
+          example: "RAZAFINDRATELO"
+        firstName:
+          type: string
+          example: "Abegà"
+        email:
+          type: string
+          example: "hei.abega.2@gmail.com"
+        phoneNumber:
+          type: string
+          example: "+261382269435"
+
+    Student :
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/User"
+        - properties:
+            level:
+              type: string
+              enum:
+                - "L1"
+                - "L2"
+                - "L3"
+            group:
+              type: string
+              enum:
+                - "J1"
+                - "J2"
+                - "H1"
+                - "H2"
+                - "G1"
+
+    Teacher:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/User"
+        - properties:
+            isAssistant:
+              type: boolean
+
+    Course :
+      type: object
+      properties:
+        courseRef:
+          type: string
+          example: "L1-001"
+          description: This is the id of the course apart from its name
+        name:
+          type: string
+          example: "PROG2"
+        credit:
+          type: integer
+          format: int32
+          example: 6
+
+    Attendance:
+      type: object
+      properties:
+        commencement:
+          type: string
+          format: date-time
+          description: "this is the commencement of the course 
+          (date and hour of the beginning of the course)"
+        termination:
+          type: string
+          format: date-time
+          description: "this is the termination date (with hour) of the course"
+        attendanceResponsible:
+          $ref: "#/components/schemas/Teacher"
+        course:
+          $ref: "#/components/schemas/Course"
+
+    Missing:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Attendance"
+        - properties:
+            isJustified:
+              type: boolean
+              description: tels whether the missing is justified or not
+
+    MissingMatcher:
+      type: object
+      properties:
+        student:
+          $ref: "#/components/schemas/Student"
+        missingList:
+          type: array
+          items:
+            $ref: "#/components/schemas/Missing"
+
