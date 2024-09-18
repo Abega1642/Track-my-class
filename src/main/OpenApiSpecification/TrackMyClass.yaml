@@ -10,7 +10,7 @@ paths:
       tags:
         - Missing
       operationId: getAllMissing
-      summary: get all missing available
+      summary: get all missing of all student for all course
       responses:
         '200':
           description: list of all missing
@@ -63,7 +63,7 @@ paths:
         - Missing
       description: "get missing of a particular student with 
       possibility to filter whether we want have justified or unjustified missing"
-      summary: get all or filtered missing of a student
+      summary: get all or filtered missing of a student according its justification status
       operationId: getStudentJustifiedOrNotMissing
       parameters:
         - $ref: "#/components/parameters/std"
@@ -77,7 +77,23 @@ paths:
                 type: object
                 $ref: "#/components/schemas/MissingMatcher"
 
-
+  /student/{std}:
+    get:
+      tags:
+        - Student
+      summary: get all student general information by its id
+      operationId: getStudentInfo
+      parameters:
+        - $ref: "#/components/parameters/std"
+      responses:
+        '200':
+          description: all general information about the student
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Student"
+    
 
 
 
