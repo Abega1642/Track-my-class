@@ -9,11 +9,53 @@ paths:
     get:
       tags:
         - Missing
-      operationId: findAllMissing
+      operationId: getAllMissing
       summary: get all missing available
       responses:
         '200':
-          description: OK
+          description: list of all missing
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MissingMatcher"
+
+  /student/{std}/missing/course:
+    get:
+      tags:
+        - Missing
+      operationId: getStudentMissingByCourse
+      description: "get all missing by student by course name with 
+      possibilities to search by date or by the fact it's justified or not"
+      summary: get all missing according to the course
+      parameters:
+        - $ref: "#/components/parameters/std"
+        - $ref: "#/components/parameters/course_name"
+        - in: query
+          required: false
+          name: is_justified
+          description: parameter for filtering if we want to see justified missing or unjustified ones
+          schema:
+            type: string
+            example: "yes"
+        - in: query
+          required: false
+          name: month_value
+          description: this is the number of the month
+          schema:
+            type: integer
+            example: 5
+        - in: query
+          required: false
+          name: year
+          description: this is the year in where we want to see the missing
+          schema:
+            type: integer
+            example: 2024
+      responses:
+        '200':
+          description: list of all missing by student by course according to filter params
           content:
             application/json:
               schema:
@@ -23,7 +65,27 @@ paths:
 
 
 
+
+
+
+
 components:
+  parameters:
+    std:
+      in: path
+      name: std
+      required: true
+      schema:
+        type: string
+        example: "STD23028"
+
+    course_name:
+      in: query
+      name: course_name
+      required: true
+      schema:
+        type: string
+        example: "PROG2"
   schemas:
     User:
       type: object
