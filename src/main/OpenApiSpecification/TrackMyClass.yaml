@@ -32,13 +32,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/std"
         - $ref: "#/components/parameters/course_name"
-        - in: query
-          required: false
-          name: is_justified
-          description: parameter for filtering if we want to see justified missing or unjustified ones
-          schema:
-            type: string
-            example: "yes"
+        - $ref: "#/components/parameters/is_justified"
         - in: query
           required: false
           name: month_value
@@ -63,7 +57,25 @@ paths:
                 items:
                   $ref: "#/components/schemas/MissingMatcher"
 
-
+  /student/{std}/missing:
+    get:
+      tags:
+        - Missing
+      description: "get missing of a particular student with 
+      possibility to filter whether we want have justified or unjustified missing"
+      summary: get all or filtered missing of a student
+      operationId: getStudentJustifiedOrNotMissing
+      parameters:
+        - $ref: "#/components/parameters/std"
+        - $ref: "#/components/parameters/is_justified"
+      responses:
+        '200':
+          description: list of all missing of a student filtered or not by the fact it's justified or not.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/MissingMatcher"
 
 
 
@@ -78,6 +90,15 @@ components:
       schema:
         type: string
         example: "STD23028"
+
+    is_justified:
+      in: query
+      required: false
+      name: is_justified
+      description: parameter for filtering if we want to see justified missing or unjustified ones
+      schema:
+        type: string
+        example: "yes"
 
     course_name:
       in: query
