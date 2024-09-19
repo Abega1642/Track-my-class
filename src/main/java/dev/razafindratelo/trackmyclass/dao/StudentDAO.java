@@ -42,27 +42,27 @@ public class StudentDAO {
         return student;
     }
 
-    public Student getStudent(String std) {
-        Student student = null;
+    public List<Student> getAllStudent() {
+        List<Student> students = new ArrayList<>();
         try {
-            PreparedStatement getStudent = dbConnection
+            PreparedStatement getAllSTDs = dbConnection
                     .getConnection()
                     .prepareStatement(
                             """
-                                SELECT * FROM student
-                                WHERE std_ref = ?
+                                    SELECT * FROM student
                                 """
                     );
-            getStudent.setString(1, std);
-            ResultSet resultSet = getStudent.executeQuery();
-            if (resultSet.next()) {
-                student = StudentMapper.mapToStudent2(resultSet);
+            getAllSTDs.execute();
+            ResultSet resultSet = getAllSTDs.getResultSet();
+            while (resultSet.next()) {
+                var student = StudentMapper.mapToStudent2(resultSet);
+                students.add(student);
             }
 
-        } catch (SQLException e) {
-            System.out.println("Error while retrieving student : " + e.getMessage());
+        } catch(SQLException e) {
+            System.out.println("Error while retrieving students ref: " + e.getMessage());
         }
-        return student;
+        return students;
     }
 
     public List<String> getAllStudentRef() {
