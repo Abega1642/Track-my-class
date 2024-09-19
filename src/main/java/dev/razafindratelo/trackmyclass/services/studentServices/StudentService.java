@@ -10,4 +10,6 @@ public interface StudentService {
     Student findStudentById(String std);
 
     List<Student> findAllStudents();
+
+    Student insertStudent(Student student);
 }

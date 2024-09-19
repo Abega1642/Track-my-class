@@ -2,6 +2,7 @@ package dev.razafindratelo.trackmyclass.dao;
 
 import dev.razafindratelo.trackmyclass.dao.repository.DBConnection;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
+import dev.razafindratelo.trackmyclass.exceptionHandler.InternalException;
 import dev.razafindratelo.trackmyclass.mapper.StudentMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,7 +38,7 @@ public class StudentDAO {
             }
 
         } catch(SQLException e) {
-            System.out.println("Error while finding student by id: " + studentId + " : " + e.getMessage());
+            throw new InternalException("Error while finding student by id := " + studentId + " = " + e.getMessage());
         }
         return student;
     }
@@ -63,6 +64,38 @@ public class StudentDAO {
             System.out.println("Error while retrieving students ref: " + e.getMessage());
         }
         return students;
+    }
+
+    public Student addStudent(Student student) {
+        try {
+            PreparedStatement insert = dbConnection.getConnection()
+                    .prepareStatement(
+                            """
+                                INSERT INTO Student (
+                                    std_ref, 
+                                    last_name, 
+                                    first_name, 
+                                    email, 
+                                    phone_number, 
+                                    level_year, 
+                                    "group"
+                                ) VALUES
+                                  (?,?,?,?,?,?,?)
+                                """);
+            insert.setString(1, student.getUserRef());
+            insert.setString(2, student.getLastName());
+            insert.setString(3, student.getFirstName());
+            insert.setString(4, student.getEmail());
+            insert.setString(5, student.getPhoneNumber());
+            insert.setString(6, student.getLevel().toString());
+            insert.setString(7, student.getGroup().toString());
+
+            insert.execute();
+            return student;
+
+        } catch( SQLException e) {
+            throw new InternalException("Error while adding student := " + e.getMessage());
+        }
     }
 
     public List<String> getAllStudentRef() {
