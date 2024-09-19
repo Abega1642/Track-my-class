@@ -1,11 +1,11 @@
 package dev.razafindratelo.trackmyclass.dao;
 
 import dev.razafindratelo.trackmyclass.dao.repository.DBConnection;
-import dev.razafindratelo.trackmyclass.dto.TeacherDTO;
 import dev.razafindratelo.trackmyclass.entity.attendances.Missing;
 import dev.razafindratelo.trackmyclass.entity.course.Course;
 import dev.razafindratelo.trackmyclass.entity.matchers.MissingMatcher;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
+import dev.razafindratelo.trackmyclass.entity.users.Teacher;
 import dev.razafindratelo.trackmyclass.mapper.CourseMapper;
 import dev.razafindratelo.trackmyclass.mapper.TeacherMapper;
 import lombok.AllArgsConstructor;
@@ -25,7 +25,7 @@ public class MissingDAO {
     private final DBConnection dbConnection;
 
     public MissingMatcher getMissingByStudent(Student student) {
-        List<Missing> missings = new ArrayList<>();
+        List<Missing> missing = new ArrayList<>();
         MissingMatcher missingMatcher = new MissingMatcher(student, List.of());
         try {
             PreparedStatement getMissing = dbConnection.getConnection()
@@ -56,10 +56,10 @@ public class MissingDAO {
             ResultSet resultSet = getMissing.getResultSet();
 
             while (resultSet.next()) {
-                TeacherDTO teacher = TeacherMapper.mapToTeacherDTO(resultSet);
+                Teacher teacher = TeacherMapper.mapToTeacherDTO(resultSet);
                 Course course = CourseMapper.mapToCourse(resultSet);
 
-                missings.add(
+                missing.add(
                         new Missing(
                                 resultSet.getObject("commencement", LocalDateTime.class),
                                 resultSet.getObject("termination", LocalDateTime.class),
@@ -69,7 +69,7 @@ public class MissingDAO {
                         )
                 );
             }
-            missingMatcher.setMissingList(missings);
+            missingMatcher.setAttendances(missing);
         } catch (SQLException e) {
             System.out.println("Error while retrieving missing by student ref: " + e.getMessage());
         }
@@ -78,67 +78,43 @@ public class MissingDAO {
 
     public MissingMatcher getStudentMissingByCourse(Student student, String courseName) {
         MissingMatcher missingMatcher = getMissingByStudent(student);
-        List<Missing> missing = missingMatcher.getMissingList()
+        List<Missing> missing = missingMatcher.getAttendances()
                 .stream().filter(mis -> mis.getCourse().getName().equalsIgnoreCase(courseName))
                 .toList();
-        missingMatcher.setMissingList(missing);
-        return missingMatcher;
-    }
-
-    public MissingMatcher getStudentMissingByCourseThisMonth(Student student, String courseName) {
-        MissingMatcher missingMatcher = getMissingByStudent(student);
-        LocalDateTime date = LocalDateTime.now();
-        List<Missing> missing = missingMatcher.getMissingList()
-                .stream().filter(mis ->
-                        mis.getCourse().getName().equalsIgnoreCase(courseName)
-                                && checkMissingMonth(mis, date.getMonthValue(), date.getYear()))
-                .toList();
-        missingMatcher.setMissingList(missing);
-        return missingMatcher;
-    }
-
-    public MissingMatcher getStudentMissingOfThisMonth(Student student) {
-        MissingMatcher missingMatcher = getMissingByStudent(student);
-        LocalDateTime date = LocalDateTime.now();
-        List<Missing> missing = missingMatcher.getMissingList()
-                .stream().filter(
-                        mis -> checkMissingMonth(mis, date.getMonthValue(), date.getYear())
-                )
-                .toList();
-        missingMatcher.setMissingList(missing);
+        missingMatcher.setAttendances(missing);
         return missingMatcher;
     }
 
     public MissingMatcher getStudentNonJustifiedMissing(Student student) {
         MissingMatcher missingMatcher = getMissingByStudent(student);
-        List<Missing> missing = missingMatcher.getMissingList()
+        List<Missing> missing = missingMatcher.getAttendances()
                 .stream().filter(mis -> !mis.isJustified())
                 .toList();
         missing.forEach(System.out::println);
-        missingMatcher.setMissingList(missing);
+        missingMatcher.setAttendances(missing);
         return missingMatcher;
     }
 
     public MissingMatcher getStudentJustifiedMissing(Student student) {
         MissingMatcher missingMatcher = getMissingByStudent(student);
-        List<Missing> missing = missingMatcher.getMissingList()
+        List<Missing> missing = missingMatcher.getAttendances()
                 .stream().filter(Missing::isJustified)
                 .toList();
         missing.forEach(System.out::println);
-        missingMatcher.setMissingList(missing);
+        missingMatcher.setAttendances(missing);
         return missingMatcher;
     }
 
     public MissingMatcher getStudentNonJustifiedMissingThisMonth(Student student) {
         MissingMatcher missingMatcher = getMissingByStudent(student);
         LocalDateTime date = LocalDateTime.now();
-        List<Missing> missing = missingMatcher.getMissingList()
+        List<Missing> missing = missingMatcher.getAttendances()
                 .stream().filter(mis ->
                         !mis.isJustified()
                         && checkMissingMonth(mis, date.getMonthValue(), date.getYear())
                 )
                 .toList();
-        missingMatcher.setMissingList(missing);
+        missingMatcher.setAttendances(missing);
         return missingMatcher;
     }
 

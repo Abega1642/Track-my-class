@@ -1,14 +1,12 @@
 package dev.razafindratelo.trackmyclass.dao;
 
 import dev.razafindratelo.trackmyclass.dao.repository.DBConnection;
-import dev.razafindratelo.trackmyclass.dto.TeacherDTO;
-import dev.razafindratelo.trackmyclass.entity.attendances.Attendance;
 import dev.razafindratelo.trackmyclass.entity.attendances.Delay;
 import dev.razafindratelo.trackmyclass.entity.course.Course;
 import dev.razafindratelo.trackmyclass.entity.matchers.DelayMatcher;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
+import dev.razafindratelo.trackmyclass.entity.users.Teacher;
 import dev.razafindratelo.trackmyclass.mapper.CourseMapper;
-import dev.razafindratelo.trackmyclass.mapper.StudentMapper;
 import dev.razafindratelo.trackmyclass.mapper.TeacherMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -58,7 +56,7 @@ public class DelayDAO {
             ResultSet resultSet = getDelays.getResultSet();
 
             while (resultSet.next()) {
-                TeacherDTO teacher = TeacherMapper.mapToTeacherDTO(resultSet);
+                Teacher teacher = TeacherMapper.mapToTeacherDTO(resultSet);
                 Course course = CourseMapper.mapToCourse(resultSet);
 
                 delays.add(
@@ -71,7 +69,7 @@ public class DelayDAO {
                         )
                 );
             }
-            delayMatcher.setDelays(delays);
+            delayMatcher.setAttendances(delays);
         } catch (SQLException e) {
             System.out.println("Error while retrieving delays by student ref: " + e.getMessage());
         }

@@ -1,13 +1,12 @@
 package dev.razafindratelo.trackmyclass.dao;
 
 import dev.razafindratelo.trackmyclass.dao.repository.DBConnection;
-import dev.razafindratelo.trackmyclass.dto.TeacherDTO;
 import dev.razafindratelo.trackmyclass.entity.attendances.Attendance;
 import dev.razafindratelo.trackmyclass.entity.course.Course;
 import dev.razafindratelo.trackmyclass.entity.matchers.AttendanceMatcher;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
+import dev.razafindratelo.trackmyclass.entity.users.Teacher;
 import dev.razafindratelo.trackmyclass.mapper.CourseMapper;
-import dev.razafindratelo.trackmyclass.mapper.StudentMapper;
 import dev.razafindratelo.trackmyclass.mapper.TeacherMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -58,7 +57,7 @@ public class AttendanceDAO {
             ResultSet resultSet = getById.getResultSet();
 
             while (resultSet.next()) {
-                TeacherDTO teacher = TeacherMapper.mapToTeacherDTO(resultSet);
+                Teacher teacher = TeacherMapper.mapToTeacherDTO(resultSet);
                 Course course = CourseMapper.mapToCourse(resultSet);
 
                 attendances.add(
