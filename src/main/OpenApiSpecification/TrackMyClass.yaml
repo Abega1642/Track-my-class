@@ -127,6 +127,27 @@ paths:
                 type: object
                 $ref: "#/components/schemas/DelayMatcher"
 
+  /student/add:
+    post:
+      tags:
+        - Student
+      summary: add a new student to database
+      operationId: addStudent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Student"
+      responses:
+        201:
+          description: student created successfully in the database
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Student"
 
 
 components:
