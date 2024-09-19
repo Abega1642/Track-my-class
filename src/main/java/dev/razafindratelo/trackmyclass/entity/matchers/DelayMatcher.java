@@ -8,11 +8,11 @@ import java.util.List;
 
 @Getter
 @Setter
-public class DelayMatcher extends AbstrAttendanceMatcher {
-    private List<Delay> delays;
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public final class DelayMatcher extends GenericAttendanceMatcher<Delay> {
 
     public DelayMatcher(Student student, List<Delay> delays) {
-        super(student);
-        this.delays = delays;
+        super(student, delays);
     }
 }

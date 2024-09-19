@@ -8,11 +8,11 @@ import java.util.List;
 
 @Getter
 @Setter
-public class AttendanceMatcher extends AbstrAttendanceMatcher{
-    private List<Attendance> attendances;
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public final class AttendanceMatcher extends GenericAttendanceMatcher<Attendance>{
 
     public AttendanceMatcher(Student student, List<Attendance> attendances) {
-        super(student);
-        this.attendances = attendances;
+        super(student, attendances);
     }
 }

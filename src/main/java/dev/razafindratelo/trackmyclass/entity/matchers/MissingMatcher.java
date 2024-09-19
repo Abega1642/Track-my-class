@@ -9,11 +9,9 @@ import java.util.List;
 
 @Getter
 @Setter
-public class MissingMatcher extends AbstrAttendanceMatcher {
-    private List<Missing> missingList;
+public final class MissingMatcher extends GenericAttendanceMatcher<Missing> {
 
     public MissingMatcher(Student student, List<Missing> missingList) {
-        super(student);
-        this.missingList = missingList;
+        super(student, missingList);
     }
 }
