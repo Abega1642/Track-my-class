@@ -9,7 +9,6 @@ import java.util.List;
 @Setter
 public class Teacher extends User {
     private boolean isAssistant;
-    private List<Course> courses;
 
     public Teacher(
             String userRef,
@@ -17,11 +16,9 @@ public class Teacher extends User {
             String firstName,
             String email,
             String phoneNumber,
-            boolean isAssistant,
-            List<Course> courses
+            boolean isAssistant
     ) {
         super(userRef, lastName, firstName, email, phoneNumber);
         this.isAssistant = isAssistant;
-        this.courses = courses;
     }
 }
