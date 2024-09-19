@@ -20,7 +20,7 @@ public class DelayController {
     }
 
     @GetMapping("/student/{std}/delays")
-    public ResponseEntity<DelayMatcher> getAllDelaysForStudent(@PathVariable("std") String std) {
+    public ResponseEntity<DelayMatcher> getStudentDelays(@PathVariable("std") String std) {
         return ResponseEntity.ok(delayService.findDelaysByStudentRef(std));
     }
 }
