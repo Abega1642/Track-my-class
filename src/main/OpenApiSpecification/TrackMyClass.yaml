@@ -94,6 +94,21 @@ paths:
                 type: object
                 $ref: "#/components/schemas/Student"
     
+  /student/delays:
+    get:
+      tags:
+        - Delays
+      summary: get all students delays
+      operationId: getAllDelays
+      responses:
+        200:
+          description: list of all student delays
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DelayMatcher"
 
 
 
@@ -203,6 +218,16 @@ components:
         course:
           $ref: "#/components/schemas/Course"
 
+    Delay:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Attendance"
+        - properties:
+            lateness:
+              type: string
+              format: date-time
+              description: indicates the date and hour of the lateness
+
     Missing:
       type: object
       allOf:
@@ -211,14 +236,28 @@ components:
             isJustified:
               type: boolean
               description: tels whether the missing is justified or not
-
-    MissingMatcher:
+    GenericAttendanceMatcher:
       type: object
       properties:
         student:
           $ref: "#/components/schemas/Student"
-        missingList:
-          type: array
-          items:
-            $ref: "#/components/schemas/Missing"
+
+    MissingMatcher:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/GenericAttendanceMatcher"
+        - properties:
+            missingList:
+              type: array
+              items:
+                $ref: "#/components/schemas/Missing"
+    DelayMatcher:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/GenericAttendanceMatcher"
+        - properties:
+            delays:
+              type: array
+              items:
+                $ref: "#/components/schemas/Delay"
 
