@@ -14,7 +14,7 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping("/student/{std}")
-    public ResponseEntity<Student> test(@PathVariable("std") String std) {
+    public ResponseEntity<Student> getStudentInfo(@PathVariable("std") String std) {
         return ResponseEntity.ok(studentService.findStudentById(std));
     }
 }
