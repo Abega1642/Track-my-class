@@ -97,7 +97,7 @@ paths:
   /student/delays:
     get:
       tags:
-        - Delays
+        - Delay
       summary: get all students delays
       operationId: getAllDelays
       responses:
@@ -108,7 +108,24 @@ paths:
               schema:
                 type: array
                 items:
+                  type: object
                   $ref: "#/components/schemas/DelayMatcher"
+
+  /student/{std}/delays:
+    get:
+      tags:
+        - Delay
+      summary: get all delays of a student
+      operationId: getStudentDelays
+      description: get list of all delays of a specific student by his or her id
+      responses:
+        200:
+          description: an object that contains the list of all delays of the pre-defined student
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/DelayMatcher"
 
 
 
@@ -121,6 +138,7 @@ components:
       schema:
         type: string
         example: "STD23028"
+        description: This is the id of the student (his unique id)
 
     is_justified:
       in: query
