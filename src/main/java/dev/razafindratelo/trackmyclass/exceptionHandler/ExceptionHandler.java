@@ -1,7 +1,12 @@
 package dev.razafindratelo.trackmyclass.exceptionHandler;
 
-public class ExceptionHandler extends RuntimeException {
-  public ExceptionHandler(String message) {
-    super(message);
-  }
+
+public sealed class ExceptionHandler extends RuntimeException
+        permits BadRequestException,
+        NotImplementedException,
+        ResourceNotFoundException
+    {
+    public ExceptionHandler(String message) {
+        super(message);
+    }
 }

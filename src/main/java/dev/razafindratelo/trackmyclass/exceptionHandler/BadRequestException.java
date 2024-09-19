@@ -1,7 +1,11 @@
 package dev.razafindratelo.trackmyclass.exceptionHandler;
 
-public class BadRequestException extends RuntimeException {
+
+import lombok.Getter;
+
+@Getter
+public final class BadRequestException extends ExceptionHandler {
     public BadRequestException(String message) {
-        super(message);
+        super("Bad request : " + message);
     }
 }
