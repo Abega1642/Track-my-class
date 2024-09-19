@@ -7,7 +7,6 @@ import dev.razafindratelo.trackmyclass.entity.matchers.MissingMatcher;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,18 +56,18 @@ public class MissingServiceImpl implements MissingService {
             if(condition.equalsIgnoreCase("yes")
                     || condition.equalsIgnoreCase("y")) {
                 res = missingDAO.getStudentJustifiedMissing(student);
-                List<Missing> missing = res.getMissingList()
+                List<Missing> missing = res.getAttendances()
                         .stream().filter(mis -> mis.getCourse().getName().equalsIgnoreCase(courseName))
                         .toList();
-                res.setMissingList(missing);
+                res.setAttendances(missing);
                 return res;
             } else if (condition.equalsIgnoreCase("no")
                     || condition.equalsIgnoreCase("n")) {
                 res = missingDAO.getStudentNonJustifiedMissing(student);
-                List<Missing> missing = res.getMissingList()
+                List<Missing> missing = res.getAttendances()
                         .stream().filter(mis -> mis.getCourse().getName().equalsIgnoreCase(courseName))
                         .toList();
-                res.setMissingList(missing);
+                res.setAttendances(missing);
 
                 return res;
             } else {
@@ -88,14 +87,14 @@ public class MissingServiceImpl implements MissingService {
             String condition
     ) {
         MissingMatcher res = findAllStudentMissingByCourse(studentRef, courseName, condition);
-        List<Missing> missing = res.getMissingList();
+        List<Missing> missing = res.getAttendances();
         if(month == null && year == null) {
             missing = missing
                     .stream().filter(
                             mis -> mis.getCommencement().getMonthValue()== LocalDateTime.now().getMonthValue()
                                     && mis.getCommencement().getYear() == LocalDateTime.now().getYear()
                     ).toList();
-            res.setMissingList(missing);
+            res.setAttendances(missing);
 
         } else if (month == null) {
             missing = missing
@@ -103,14 +102,14 @@ public class MissingServiceImpl implements MissingService {
                             mis -> mis.getCommencement().getMonthValue()== LocalDateTime.now().getMonthValue()
                                     && mis.getCommencement().getYear() == year
                     ).toList();
-            res.setMissingList(missing);
+            res.setAttendances(missing);
         } else if (year == null) {
             missing = missing
                     .stream().filter(
                             mis -> mis.getCommencement().getMonthValue()== month
                                     && mis.getCommencement().getYear() == LocalDateTime.now().getYear()
                     ).toList();
-            res.setMissingList(missing);
+            res.setAttendances(missing);
         } else {
             missing = missing
                     .stream().filter(
@@ -118,7 +117,7 @@ public class MissingServiceImpl implements MissingService {
                                     && mis.getCommencement().getYear() == year
                     ).toList();
         }
-        res.setMissingList(missing);
+        res.setAttendances(missing);
         return res;
     }
 }
