@@ -1,9 +1,6 @@
 package dev.razafindratelo.trackmyclass.restException;
 
-import dev.razafindratelo.trackmyclass.exceptionHandler.BadRequestException;
-import dev.razafindratelo.trackmyclass.exceptionHandler.ErrorLog;
-import dev.razafindratelo.trackmyclass.exceptionHandler.ExceptionHandlerType;
-import dev.razafindratelo.trackmyclass.exceptionHandler.ResourceNotFoundException;
+import dev.razafindratelo.trackmyclass.exceptionHandler.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,5 +32,17 @@ public class InternalRestException {
                 ExceptionHandlerType.CLIENT_EXCEPTION
         );
         return new ResponseEntity<>(err, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = ResourceDuplicatedException.class)
+    public ResponseEntity<Object> handleResourceDuplicatedException(ResourceDuplicatedException e, WebRequest request) {
+        log.error("Resource duplicated : ", e);
+        ErrorLog err = new ErrorLog(
+                HttpStatus.CONFLICT.value(),
+                e.getMessage(),
+                request.getDescription(false),
+                ExceptionHandlerType.CLIENT_EXCEPTION
+        );
+        return new ResponseEntity<>(err, HttpStatus.CONFLICT);
     }
 }

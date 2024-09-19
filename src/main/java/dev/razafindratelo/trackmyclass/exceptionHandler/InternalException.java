@@ -1,7 +1,7 @@
 package dev.razafindratelo.trackmyclass.exceptionHandler;
 
-public class InternalException extends RuntimeException {
-  public InternalException(String message) {
-    super(message);
-  }
+public final class InternalException extends ExceptionHandler {
+    public InternalException(String message) {
+        super("Internal error : " + message);
+    }
 }
