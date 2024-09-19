@@ -56,7 +56,7 @@ public class DelayDAO {
             ResultSet resultSet = getDelays.getResultSet();
 
             while (resultSet.next()) {
-                Teacher teacher = TeacherMapper.mapToTeacherDTO(resultSet);
+                Teacher teacher = TeacherMapper.mapToTeacher(resultSet);
                 Course course = CourseMapper.mapToCourse(resultSet);
 
                 delays.add(

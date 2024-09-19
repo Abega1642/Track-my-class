@@ -56,7 +56,7 @@ public class MissingDAO {
             ResultSet resultSet = getMissing.getResultSet();
 
             while (resultSet.next()) {
-                Teacher teacher = TeacherMapper.mapToTeacherDTO(resultSet);
+                Teacher teacher = TeacherMapper.mapToTeacher(resultSet);
                 Course course = CourseMapper.mapToCourse(resultSet);
 
                 missing.add(

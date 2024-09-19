@@ -1,12 +1,12 @@
 package dev.razafindratelo.trackmyclass.mapper;
 
-import dev.razafindratelo.trackmyclass.dto.TeacherDTO;
+import dev.razafindratelo.trackmyclass.entity.users.Teacher;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class TeacherMapper {
-    public static TeacherDTO mapToTeacherDTO(ResultSet resultSet) throws SQLException {
-        return new TeacherDTO(
+    public static Teacher mapToTeacher(ResultSet resultSet) throws SQLException {
+        return new Teacher(
                 resultSet.getString("tch_ref"),
                 resultSet.getString("teacher_last_name"),
                 resultSet.getString("teacher_first_name"),

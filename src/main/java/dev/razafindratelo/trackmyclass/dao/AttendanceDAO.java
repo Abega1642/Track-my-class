@@ -57,7 +57,7 @@ public class AttendanceDAO {
             ResultSet resultSet = getById.getResultSet();
 
             while (resultSet.next()) {
-                Teacher teacher = TeacherMapper.mapToTeacherDTO(resultSet);
+                Teacher teacher = TeacherMapper.mapToTeacher(resultSet);
                 Course course = CourseMapper.mapToCourse(resultSet);
 
                 attendances.add(
