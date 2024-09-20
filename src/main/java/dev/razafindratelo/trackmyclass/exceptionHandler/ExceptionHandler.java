@@ -3,7 +3,7 @@ package dev.razafindratelo.trackmyclass.exceptionHandler;
 
 public sealed class ExceptionHandler extends RuntimeException
         permits
-        BadRequestException,
+        IllegalRequestException,
         InternalException,
         NotImplementedException,
         ResourceDuplicatedException,
