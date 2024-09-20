@@ -34,6 +34,7 @@ public class MissingDAO {
                                 SELECT
                                         course.crs_ref,
                                         course.name course_name,
+                                        course.credit crs_credit,
                                         has_missed.commencement,
                                         has_missed.termination,
                                         has_missed.is_justified,

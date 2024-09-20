@@ -34,7 +34,7 @@ public class StudentDAO {
             ResultSet res = findStudent.executeQuery();
 
             if(res.next()) {
-                student = StudentMapper.mapToStudent2(res);
+                student = StudentMapper.mapToStudent(res);
             }
 
         } catch(SQLException e) {
@@ -56,7 +56,7 @@ public class StudentDAO {
             getAllSTDs.execute();
             ResultSet resultSet = getAllSTDs.getResultSet();
             while (resultSet.next()) {
-                var student = StudentMapper.mapToStudent2(resultSet);
+                var student = StudentMapper.mapToStudent(resultSet);
                 students.add(student);
             }
 
