@@ -149,6 +149,80 @@ paths:
                 type: object
                 $ref: "#/components/schemas/Student"
 
+  /teachers:
+    get:
+      tags:
+        - Teacher
+      summary: get all teachers
+      operationId: getAllTeachers
+      responses:
+        200:
+          description: list off all teachers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Teacher"
+
+  /teacher/{teacherRef}:
+    get:
+      tags:
+        - Teacher
+      summary: get all info of a specific teacher
+      operationId: getTeacherById
+      parameters:
+        - $ref: "#/components/parameters/teacherRef"
+      responses:
+        200:
+          description: all info corresponding to the teacher reference
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Teacher"
+
+  /teacher/{teacherRef}/update:
+    post:
+      tags:
+        - Teacher
+      summary: update teacher infos
+      operationId: updateTeacherById
+      parameters:
+        - $ref: "#/components/parameters/teacherRef"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Teacher"
+      responses:
+        200:
+          description: teacher infos updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Teacher"
+
+    patch:
+      tags:
+        - Teacher
+      summary: update partial teacher info
+      operationId: updateTeacherPartialById
+      parameters:
+        - $ref: "#/components/parameters/teacherRef"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Teacher"
+      responses:
+        200:
+          description: teacher infos updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Teacher"
+
+
 
 components:
   parameters:
@@ -160,7 +234,14 @@ components:
         type: string
         example: "STD23028"
         description: This is the id of the student (his unique id)
-
+    teacherRef:
+      in: path
+      name: teacherRef
+      required: true
+      schema:
+        type: string
+        example: "TCH21001"
+        description: This is the id of the teacher (his unique id)
     is_justified:
       in: query
       required: false
