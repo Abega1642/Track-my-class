@@ -2,13 +2,12 @@ package dev.razafindratelo.trackmyclass.services.studentServices;
 
 import dev.razafindratelo.trackmyclass.dao.StudentDAO;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
-import dev.razafindratelo.trackmyclass.exceptionHandler.BadRequestException;
+import dev.razafindratelo.trackmyclass.exceptionHandler.IllegalRequestException;
 import dev.razafindratelo.trackmyclass.exceptionHandler.ResourceDuplicatedException;
 import dev.razafindratelo.trackmyclass.exceptionHandler.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -46,8 +45,18 @@ public class StudentServiceImpl implements StudentService {
                 || student.getGroup() == null
                 || student.getPhoneNumber() == null
         ) {
-            throw new BadRequestException("Student attributes must not be null");
+            throw new IllegalRequestException("Student attributes must not be null");
         }
         return studentDAO.addStudent(student);
+    }
+
+    @Override
+    public List<String> getAllStudentsRef() {
+        return studentDAO.getAllStudentRef();
+    }
+
+    @Override
+    public boolean checkIfStudentExists(String std) {
+        return getAllStudentsRef().contains(std);
     }
 }

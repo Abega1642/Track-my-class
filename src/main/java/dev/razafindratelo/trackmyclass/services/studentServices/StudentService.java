@@ -12,4 +12,8 @@ public interface StudentService {
     List<Student> findAllStudents();
 
     Student insertStudent(Student student);
+
+    List<String> getAllStudentsRef();
+
+    boolean checkIfStudentExists(String std);
 }
