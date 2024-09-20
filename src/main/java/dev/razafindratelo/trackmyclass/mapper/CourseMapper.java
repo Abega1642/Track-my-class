@@ -10,7 +10,7 @@ public class CourseMapper {
         return new Course(
                 resultSet.getString("crs_ref"),
                 resultSet.getString("course_name"),
-                0
+                resultSet.getInt("crs_credit")
         );
     }
 }
