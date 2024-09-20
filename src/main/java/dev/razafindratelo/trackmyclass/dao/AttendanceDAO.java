@@ -4,8 +4,10 @@ import dev.razafindratelo.trackmyclass.dao.repository.DBConnection;
 import dev.razafindratelo.trackmyclass.entity.attendances.Attendance;
 import dev.razafindratelo.trackmyclass.entity.course.Course;
 import dev.razafindratelo.trackmyclass.entity.matchers.AttendanceMatcher;
+import dev.razafindratelo.trackmyclass.entity.matchers.GenericAttendanceMatcher;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
 import dev.razafindratelo.trackmyclass.entity.users.Teacher;
+import dev.razafindratelo.trackmyclass.exceptionHandler.InternalException;
 import dev.razafindratelo.trackmyclass.mapper.CourseMapper;
 import dev.razafindratelo.trackmyclass.mapper.TeacherMapper;
 import lombok.AllArgsConstructor;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +41,7 @@ public class AttendanceDAO {
                                         is_present.commencement,
                                         course.crs_ref,
                                         course.name course_name,
+                                        course.credit crs_credit,
                                         is_present.termination,
                                         teacher.tch_ref,
                                         teacher.last_name teacher_last_name,
@@ -77,4 +81,50 @@ public class AttendanceDAO {
         return attendanceMatcher;
     }
 
+    public List<AttendanceMatcher> doAttendance(List<String> stds) {
+        List<GenericAttendanceMatcher<Attendance>> attendances = new ArrayList<>();
+        return null;
+    }
+
+    public Attendance addStudentAttendance(
+            String std,
+            Course course,
+            Teacher responsible,
+            LocalDateTime commencement,
+            LocalDateTime termination
+    ) {
+        try {
+            PreparedStatement insertion = dbConnection
+                    .getConnection()
+                    .prepareStatement(
+                            """
+                                INSERT INTO is_present (
+                                    crs_ref,
+                                    std_ref,
+                                    tch_ref,
+                                    commencement,
+                                    termination) VALUES
+                                 (?, ?, ? ,?, ?)
+                                """
+                    );
+
+            insertion.setString(1, course.getCourseRef());
+            insertion.setString(2, std);
+            insertion.setString(3, responsible.getUserRef());
+            insertion.setTimestamp(4, Timestamp.valueOf(commencement));
+            insertion.setObject(5, Timestamp.valueOf(termination));
+
+            insertion.execute();
+
+            return new Attendance(
+                    commencement,
+                    termination,
+                    responsible,
+                    course
+            );
+
+        } catch (SQLException e) {
+            throw new InternalException("Error while add student attendance : " + e.getMessage());
+        }
+    }
 }
