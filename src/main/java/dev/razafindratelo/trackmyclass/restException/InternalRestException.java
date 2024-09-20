@@ -11,15 +11,15 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 @Slf4j
 public class InternalRestException {
-    @ExceptionHandler(value = BadRequestException.class)
-    public ResponseEntity<?> handleBadRequestException(BadRequestException e, WebRequest request) {
+    @ExceptionHandler(value = IllegalRequestException.class)
+    public ResponseEntity<?> handleBadRequestException(IllegalRequestException e, WebRequest request) {
         log.error("Bad request", e);
         ErrorLog err = new ErrorLog(
-                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_ACCEPTABLE.value(),
                 e.getMessage(), request.getDescription(false),
                 ExceptionHandlerType.CLIENT_EXCEPTION
         );
-        return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(err, HttpStatus.NOT_ACCEPTABLE);
     }
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
