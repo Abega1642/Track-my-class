@@ -24,7 +24,7 @@ public class CourseDAO {
                             """
                                 SELECT 
                                     crs_ref,
-                                    name crs_name,
+                                    name course_name,
                                     credit crs_credit
                                 FROM course WHERE name ILIKE ?
                                 """
