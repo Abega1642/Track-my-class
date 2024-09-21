@@ -10,10 +10,10 @@ import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 @Slf4j
-public class InternalRestException {
+public class APIRestExceptionHandler {
     @ExceptionHandler(value = IllegalRequestException.class)
     public ResponseEntity<?> handleBadRequestException(IllegalRequestException e, WebRequest request) {
-        log.error("Bad request", e);
+        log.error("Bad request : {}", e.getMessage());
         ErrorLog err = new ErrorLog(
                 HttpStatus.NOT_ACCEPTABLE.value(),
                 e.getMessage(), request.getDescription(false),
@@ -24,7 +24,7 @@ public class InternalRestException {
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
     public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException e, WebRequest request) {
-        log.error("Resource not found : ", e);
+        log.error("Resource not found : {}", e.getMessage());
         ErrorLog err = new ErrorLog(
                 HttpStatus.NOT_FOUND.value(),
                 e.getMessage(),
@@ -36,7 +36,7 @@ public class InternalRestException {
 
     @ExceptionHandler(value = ResourceDuplicatedException.class)
     public ResponseEntity<Object> handleResourceDuplicatedException(ResourceDuplicatedException e, WebRequest request) {
-        log.error("Resource duplicated : ", e);
+        log.error("Resource duplicated : {}", e.getMessage());
         ErrorLog err = new ErrorLog(
                 HttpStatus.CONFLICT.value(),
                 e.getMessage(),
@@ -44,5 +44,17 @@ public class InternalRestException {
                 ExceptionHandlerType.CLIENT_EXCEPTION
         );
         return new ResponseEntity<>(err, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = InternalException.class)
+    public ResponseEntity<Object> handleInternalException(InternalException e, WebRequest request) {
+        log.error("Internal server error : {}", e.getMessage());
+        ErrorLog err = new ErrorLog(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                e.getMessage(),
+                request.getDescription(false),
+                ExceptionHandlerType.SERVER_EXCEPTION
+        );
+        return new ResponseEntity<>(err, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
