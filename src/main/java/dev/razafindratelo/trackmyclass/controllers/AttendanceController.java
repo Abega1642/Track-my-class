@@ -1,5 +1,6 @@
 package dev.razafindratelo.trackmyclass.controllers;
-import dev.razafindratelo.trackmyclass.dto.MissingDTO;
+import dev.razafindratelo.trackmyclass.dto.GeneralMissingDTO;
+import dev.razafindratelo.trackmyclass.entity.attendances.Attendance;
 import dev.razafindratelo.trackmyclass.entity.matchers.AttendanceMatcher;
 import dev.razafindratelo.trackmyclass.entity.matchers.GenericAttendanceMatcher;
 import dev.razafindratelo.trackmyclass.services.attendanceServices.AttendanceService;
@@ -25,10 +26,29 @@ public class AttendanceController {
         return ResponseEntity.ok(attendanceService.findAttendancesByStudentRef(std));
     }
 
-    @PostMapping("/teacher/{teacherRef}/attendances")
-    public ResponseEntity<List<GenericAttendanceMatcher<?>>> doAttendance(
+    @PostMapping("/teacher/{teacherRef}/attendance/add/{std}")
+    public ResponseEntity<AttendanceMatcher> addStudentAttendance(
             @PathVariable("teacherRef") String teacherRef,
-            @RequestBody MissingDTO missingDTO ){
-        return new ResponseEntity<>(attendanceService.doAttendance(teacherRef, missingDTO), HttpStatus.CREATED);
+            @PathVariable("std") String std,
+            @RequestBody Attendance attendance
+    ) {
+        return new ResponseEntity<>(
+                attendanceService.addStudentAttendance(std, attendance),
+                HttpStatus.CREATED
+        );
+    }
+
+    @PostMapping("/teacher/{teacherRef}/attendances/add")
+    public ResponseEntity<List<GenericAttendanceMatcher<?>>> doAttendanceByLevelYear(
+            @PathVariable("teacherRef") String teacherRef,
+            @RequestBody GeneralMissingDTO generalMissingDTO,
+            @RequestParam("type") String type
+    ){
+
+        return new ResponseEntity<>(
+                attendanceService.handleAttendances(teacherRef, generalMissingDTO, type),
+                HttpStatus.CREATED
+        );
+
     }
 }
