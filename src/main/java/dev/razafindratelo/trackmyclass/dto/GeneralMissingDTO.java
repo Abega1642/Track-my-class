@@ -12,9 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class MissingDTO {
+public class GeneralMissingDTO {
     private String courseName;
-    private Group group;
     private LocalDateTime commencement;
     private LocalDateTime termination;
     private List<String> stdsWithMissingJustification;
