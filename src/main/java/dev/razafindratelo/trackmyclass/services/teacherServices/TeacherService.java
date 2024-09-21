@@ -11,7 +11,11 @@ public interface TeacherService {
 
     List<Teacher> findAllTeachers();
 
+    Teacher addTeacher(Teacher teacher);
+
     Teacher updateTeacher(String teacherRef, Teacher teacher);
 
     Teacher partialTeacherUpdate(String teacherRef, Teacher teacher) throws NoSuchFieldException, IllegalAccessException;
+
+    Teacher deleteTeacher(String teacherRef);
 }

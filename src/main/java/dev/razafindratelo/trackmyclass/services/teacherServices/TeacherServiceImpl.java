@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -35,6 +36,14 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
+    public Teacher addTeacher(Teacher teacher) {
+        if(teacher == null) {
+            throw new IllegalRequestException("Teacher must not be null");
+        }
+        return teacherDAO.addTeacher(teacher);
+    }
+
+    @Override
     public Teacher updateTeacher(String teacherRef, Teacher teacher) {
         if (teacher == null || teacherRef == null || teacherRef.isEmpty()) {
             throw new IllegalRequestException("Teacher must not be null");
@@ -57,6 +66,22 @@ public class TeacherServiceImpl implements TeacherService {
         System.out.println(oldTeacher);
         return updateTeacher(teacherRef, oldTeacher);
 
+    }
+
+    @Override
+    public Teacher deleteTeacher(String teacherRef) {
+        if(teacherRef == null) {
+            throw new IllegalRequestException("Teacher ref must not be null");
+        }
+        Teacher teacher = teacherDAO.findTeacherById(teacherRef);
+        return Objects.requireNonNullElseGet(teacher, () -> new Teacher(
+                "-",
+                "NO_MATCH",
+                "NO_MATCH",
+                "NO_MATCH",
+                "NO_MATCH",
+                true
+        ));
     }
 
 }
