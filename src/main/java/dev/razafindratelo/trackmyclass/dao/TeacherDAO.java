@@ -136,4 +136,20 @@ public class TeacherDAO {
             throw new InternalException("Error while updating teacher := " + e.getMessage());
         }
     }
+
+    public Teacher deleteTeacher(String teacherRef) {
+        Teacher teacher = findTeacherById(teacherRef);
+
+        try {
+            PreparedStatement deletion = dbConnection
+                    .getConnection()
+                    .prepareStatement("DELETE FROM Teacher WHERE tch_ref = ?");
+            deletion.setString(1, teacherRef);
+
+            deletion.executeUpdate();
+            return teacher;
+        } catch(SQLException e) {
+            throw new InternalException("Error while deleting teacher := " + e.getMessage());
+        }
+    }
 }
