@@ -5,8 +5,27 @@ import org.springframework.stereotype.Component;
 
 @Component
 public final class StudentMerger implements GenericMerger<Student, Student> {
+
     @Override
     public Student mergeFields(Student source, Student target) throws NoSuchFieldException, IllegalAccessException {
-        return null;
+        if (source == null || target == null) {
+            throw new IllegalArgumentException("Teacher must not be null");
+        }
+
+        if(source.getLastName() != null) {
+            target.setLastName(source.getFirstName());
+        } else if (source.getFirstName() != null) {
+            target.setLastName(source.getFirstName());
+        }  else if (source.getEmail() != null) {
+            target.setEmail(source.getEmail());
+        } else if (source.getPhoneNumber() != null) {
+            target.setPhoneNumber(source.getPhoneNumber());
+        } else if (source.getLevel() != null) {
+            target.setLevel(source.getLevel());
+        } else if (source.getGroup()!= null) {
+            target.setGroup(source.getGroup());
+        }
+
+        return target;
     }
 }
