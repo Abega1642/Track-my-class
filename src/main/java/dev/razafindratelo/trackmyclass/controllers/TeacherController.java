@@ -5,7 +5,6 @@ import dev.razafindratelo.trackmyclass.services.teacherServices.TeacherService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -22,6 +21,11 @@ public class TeacherController {
     public ResponseEntity<Teacher> getTeacherById(@PathVariable("teacherRef") String teacherRef) {
         Teacher teacher = teacherService.findTeacherById(teacherRef);
         return ResponseEntity.ok(teacher);
+    }
+
+    @PostMapping("/teacher/add")
+    public ResponseEntity<Teacher> addTeacher(@RequestBody Teacher teacher) {
+        return ResponseEntity.ok(teacherService.addTeacher(teacher));
     }
 
     @PutMapping("/teacher/{teacherRef}/update")
