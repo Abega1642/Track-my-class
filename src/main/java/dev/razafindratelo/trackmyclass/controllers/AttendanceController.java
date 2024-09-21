@@ -15,12 +15,12 @@ public class AttendanceController {
     private final AttendanceService attendanceService;
 
     @GetMapping("/student/attendances")
-    public ResponseEntity<List<AttendanceMatcher>> test() {
+    public ResponseEntity<List<AttendanceMatcher>> getAllAttendances() {
         return ResponseEntity.ok(attendanceService.findAllAttendances());
     }
 
     @GetMapping("/student/{std}/attendances")
-    public ResponseEntity<AttendanceMatcher> getAttendancesById(
+    public ResponseEntity<AttendanceMatcher> getAttendancesByStudentId(
             @PathVariable("std") String std) {
         return ResponseEntity.ok(attendanceService.findAttendancesByStudentRef(std));
     }
