@@ -20,4 +20,10 @@ public interface StudentService {
     List<String> filterExistingStudents(List<String> STDs);
 
     List<String> filterPresentStds(List<String> STDs);
+
+    Student deleteStudent(String std);
+
+    Student updateStudentIntegrally(String std, Student student);
+
+    Student updateStudentPartially(String std, Student student) throws NoSuchFieldException, IllegalAccessException;
 }
