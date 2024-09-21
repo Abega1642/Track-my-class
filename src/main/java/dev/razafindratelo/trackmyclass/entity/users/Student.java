@@ -3,6 +3,7 @@ package dev.razafindratelo.trackmyclass.entity.users;
 import dev.razafindratelo.trackmyclass.entity.users.enums.Group;
 import dev.razafindratelo.trackmyclass.entity.users.enums.Level;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -27,8 +28,13 @@ public class Student extends User {
     ) {
         super(userRef, lastName, firstName, email, phoneNumber);
 
-        if(!doesLevelMatchesToGroup(level, group)) {
-            throw new IllegalArgumentException("Level doesn't match to group");
+        if (!doesLevelMatchesToGroup(level, group)) {
+            if (level == null && group == null) {
+                this.level = Level.L1;
+                this.group = Group.J1;
+            } else {
+                throw new IllegalArgumentException("Level doesn't match to group");
+            }
         } else {
             this.level = level;
             this.group = group;
