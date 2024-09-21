@@ -1,11 +1,13 @@
 package dev.razafindratelo.trackmyclass.controllers;
+import dev.razafindratelo.trackmyclass.dto.MissingDTO;
 import dev.razafindratelo.trackmyclass.entity.matchers.AttendanceMatcher;
+import dev.razafindratelo.trackmyclass.entity.matchers.GenericAttendanceMatcher;
 import dev.razafindratelo.trackmyclass.services.attendanceServices.AttendanceService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -22,5 +24,12 @@ public class AttendanceController {
     public ResponseEntity<AttendanceMatcher> getAttendancesById(
             @PathVariable("std") String std) {
         return ResponseEntity.ok(attendanceService.findAttendancesByStudentRef(std));
+    }
+
+    @PostMapping("/teacher/{teacherRef}/attendances")
+    public ResponseEntity<List<GenericAttendanceMatcher<?>>> doAttendance(
+            @PathVariable("teacherRef") String teacherRef,
+            @RequestBody MissingDTO missingDTO ){
+        return new ResponseEntity<>(attendanceService.doAttendance(teacherRef, missingDTO), HttpStatus.CREATED);
     }
 }
