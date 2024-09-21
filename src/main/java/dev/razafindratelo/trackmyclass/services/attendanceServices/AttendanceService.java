@@ -1,6 +1,7 @@
 package dev.razafindratelo.trackmyclass.services.attendanceServices;
 
-import dev.razafindratelo.trackmyclass.dto.MissingDTO;
+import dev.razafindratelo.trackmyclass.dto.GeneralMissingDTO;
+import dev.razafindratelo.trackmyclass.dto.GroupMissingDTO;
 import dev.razafindratelo.trackmyclass.entity.attendances.Attendance;
 import dev.razafindratelo.trackmyclass.entity.matchers.AttendanceMatcher;
 import dev.razafindratelo.trackmyclass.entity.matchers.GenericAttendanceMatcher;
@@ -15,5 +16,15 @@ public interface AttendanceService {
 
     AttendanceMatcher addStudentAttendance(String std, Attendance attendance);
 
-    List<GenericAttendanceMatcher<?>> doAttendance(String teacherRef, MissingDTO missing);
+    List<GenericAttendanceMatcher<?>> handleAttendances(String teacherRef, GeneralMissingDTO missing, String type);
+
+    List<GenericAttendanceMatcher<?>> doAttendanceByLevelYear(String teacherRef, GeneralMissingDTO missing);
+
+    List<GenericAttendanceMatcher<?>> doAttendanceByGroup(String teacherRef, GroupMissingDTO missing);
+
+    List<AttendanceMatcher> addStudentsAttendances(
+            List<String> presentSTDs,
+            GeneralMissingDTO missing,
+            String teacherRef
+    );
 }
