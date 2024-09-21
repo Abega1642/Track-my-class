@@ -4,7 +4,6 @@ import dev.razafindratelo.trackmyclass.dao.repository.DBConnection;
 import dev.razafindratelo.trackmyclass.entity.attendances.Attendance;
 import dev.razafindratelo.trackmyclass.entity.course.Course;
 import dev.razafindratelo.trackmyclass.entity.matchers.AttendanceMatcher;
-import dev.razafindratelo.trackmyclass.entity.matchers.GenericAttendanceMatcher;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
 import dev.razafindratelo.trackmyclass.entity.users.Teacher;
 import dev.razafindratelo.trackmyclass.exceptionHandler.InternalException;
@@ -79,11 +78,6 @@ public class AttendanceDAO {
             System.out.println("Error while retrieving attendances by student ref: " + e.getMessage());
         }
         return attendanceMatcher;
-    }
-
-    public List<AttendanceMatcher> doAttendance(List<String> stds) {
-        List<GenericAttendanceMatcher<Attendance>> attendances = new ArrayList<>();
-        return null;
     }
 
     public Attendance addStudentAttendance(
