@@ -6,6 +6,7 @@ import dev.razafindratelo.trackmyclass.entity.course.Course;
 import dev.razafindratelo.trackmyclass.entity.matchers.MissingMatcher;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
 import dev.razafindratelo.trackmyclass.entity.users.Teacher;
+import dev.razafindratelo.trackmyclass.exceptionHandler.InternalException;
 import dev.razafindratelo.trackmyclass.mapper.CourseMapper;
 import dev.razafindratelo.trackmyclass.mapper.TeacherMapper;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +74,7 @@ public class MissingDAO {
             }
             missingMatcher.setAttendances(missing);
         } catch (SQLException e) {
-            System.out.println("Error while retrieving missing by student ref: " + e.getMessage());
+            throw new InternalException("Error while retrieving missing by student ref: " + e.getMessage());
         }
         return missingMatcher;
     }
@@ -121,6 +123,51 @@ public class MissingDAO {
 
     private static boolean checkMissingMonth(Missing missing, int month, int year) {
         return missing.getCommencement().getMonthValue() == month && missing.getCommencement().getYear() == year;
+    }
+
+    public Missing addMissing(
+            String std,
+            Course course,
+            Teacher responsible,
+            LocalDateTime commencement,
+            LocalDateTime termination,
+            boolean isJustified
+    ) {
+        try {
+            PreparedStatement insertion = dbConnection
+                    .getConnection()
+                    .prepareStatement(
+                            """
+                                     INSERT INTO has_missed (
+                                         std_ref,
+                                         crs_ref,
+                                         tch_ref,
+                                         commencement,
+                                         termination,
+                                         is_justified
+                                     ) VALUES (?,?,?,?,?,?)
+                                 """
+                    );
+            insertion.setString(1, std);
+            insertion.setString(2, course.getCourseRef());
+            insertion.setString(3, responsible.getUserRef());
+            insertion.setTimestamp(4, Timestamp.valueOf(commencement));
+            insertion.setTimestamp(5, Timestamp.valueOf(termination));
+            insertion.setBoolean(6, isJustified);
+
+            insertion.execute();
+
+            return new Missing(
+                    commencement,
+                    termination,
+                    responsible,
+                    course,
+                    isJustified
+            );
+
+        } catch(SQLException e) {
+            throw new InternalException("Error while adding missing: " + e.getMessage());
+        }
     }
 
 }
