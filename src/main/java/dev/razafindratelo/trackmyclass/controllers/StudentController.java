@@ -13,7 +13,7 @@ import java.util.List;
 public class StudentController {
     private StudentService studentService;
 
-    @GetMapping("/student/list")
+    @GetMapping("/students")
     public ResponseEntity<List<Student>> getAllStudent() {
         return ResponseEntity.ok(studentService.findAllStudents());
     }
@@ -27,5 +27,26 @@ public class StudentController {
     public ResponseEntity<Student> addStudent(@RequestBody Student student) {
         Student addedStudent = studentService.insertStudent(student);
         return new ResponseEntity<>(addedStudent, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/student/{std}/update")
+    public ResponseEntity<Student> updateStudentIntegrally(
+            @PathVariable("std") String std,
+            @RequestBody Student student
+    ) {
+        return ResponseEntity.ok(studentService.updateStudentIntegrally(std, student));
+    }
+
+    @PatchMapping("/student/{std}/update")
+    public ResponseEntity<Student> updateStudentPartially(
+            @PathVariable("std") String std,
+            @RequestBody Student student
+    ) throws NoSuchFieldException, IllegalAccessException {
+        return ResponseEntity.ok(studentService.updateStudentPartially(std, student));
+    }
+
+    @DeleteMapping("/student/delete/{std}")
+    public ResponseEntity<Student> deleteStudentBy(@PathVariable("std") String std) {
+        return ResponseEntity.ok(studentService.deleteStudent(std));
     }
 }
