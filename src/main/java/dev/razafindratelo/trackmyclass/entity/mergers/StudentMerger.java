@@ -13,9 +13,9 @@ public final class StudentMerger implements GenericMerger<Student, Student> {
         }
 
         if(source.getLastName() != null) {
-            target.setLastName(source.getFirstName());
+            target.setLastName(source.getLastName());
         } else if (source.getFirstName() != null) {
-            target.setLastName(source.getFirstName());
+            target.setFirstName(source.getFirstName());
         }  else if (source.getEmail() != null) {
             target.setEmail(source.getEmail());
         } else if (source.getPhoneNumber() != null) {
