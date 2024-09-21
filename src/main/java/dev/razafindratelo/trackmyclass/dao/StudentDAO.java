@@ -119,4 +119,66 @@ public class StudentDAO {
         }
         return studentRefs;
     }
+
+    public Student deleteStudent(String std) {
+        List<String> stds = getAllStudentRef();
+        if(stds.contains(std)) {
+            Student student = getStudentById(std);
+            try {
+                PreparedStatement deletion = dbConnection
+                        .getConnection()
+                        .prepareStatement("DELETE FROM student WHERE std_ref = ?");
+                deletion.setString(1, std);
+                deletion.execute();
+                return student;
+            } catch(SQLException e) {
+                throw new InternalException("Error while deleting student := " + e.getMessage());
+            }
+        } else {
+            return new Student(
+                    std,
+                    "NO_STUDENT_MATCHED",
+                    "NO_STUDENT_MATCHED",
+                    "NO_STUDENT_MATCHED",
+                    "NO_STUDENT_MATCHED",
+                    null,
+                    null
+            );
+        }
+    }
+
+    public Student integralUpdateStudent(String std, Student student) {
+        try {
+            PreparedStatement update = dbConnection
+                    .getConnection()
+                    .prepareStatement(
+                            """
+                                     UPDATE student SET
+                                         last_name = ?,
+                                         first_name = ?,
+                                         phone_number = ?,
+                                         email = ?,
+                                         level_year = ?,
+                                         "group" = ?
+                                    WHERE std_ref = ?
+                                 """
+                           );
+            update.setString(1, student.getLastName());
+            update.setString(2, student.getFirstName());
+            update.setString(3, student.getPhoneNumber());
+            update.setString(4, student.getEmail());
+            update.setString(5, student.getLevel().toString());
+            update.setString(6, student.getGroup().toString());
+            update.setString(7, student.getUserRef());
+
+            update.executeUpdate();
+
+            student.setUserRef(std);
+
+            return student;
+
+        } catch(SQLException e) {
+            throw new InternalException("Error while updating student := " + e.getMessage());
+        }
+    }
 }
