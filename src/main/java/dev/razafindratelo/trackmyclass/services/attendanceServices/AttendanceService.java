@@ -3,8 +3,8 @@ package dev.razafindratelo.trackmyclass.services.attendanceServices;
 import dev.razafindratelo.trackmyclass.dto.MissingDTO;
 import dev.razafindratelo.trackmyclass.entity.attendances.Attendance;
 import dev.razafindratelo.trackmyclass.entity.matchers.AttendanceMatcher;
+import dev.razafindratelo.trackmyclass.entity.matchers.GenericAttendanceMatcher;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -15,5 +15,5 @@ public interface AttendanceService {
 
     AttendanceMatcher addStudentAttendance(String std, Attendance attendance);
 
-    List<AttendanceMatcher> doAttendance(MissingDTO missing);
+    List<GenericAttendanceMatcher<?>> doAttendance(String teacherRef, MissingDTO missing);
 }
