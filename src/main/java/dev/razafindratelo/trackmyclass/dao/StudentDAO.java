@@ -2,12 +2,14 @@ package dev.razafindratelo.trackmyclass.dao;
 
 import dev.razafindratelo.trackmyclass.dao.repository.DBConnection;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
+import dev.razafindratelo.trackmyclass.entity.users.User;
+import dev.razafindratelo.trackmyclass.entity.users.enums.Group;
+import dev.razafindratelo.trackmyclass.entity.users.enums.Level;
 import dev.razafindratelo.trackmyclass.exceptionHandler.InternalException;
 import dev.razafindratelo.trackmyclass.mapper.StudentMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Repository;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -64,6 +66,18 @@ public class StudentDAO {
             System.out.println("Error while retrieving students ref: " + e.getMessage());
         }
         return students;
+    }
+
+    public List<String> getAllStudentOfSpecificLevel(Level level) {
+        return getAllStudent().stream().filter(s -> s.getLevel().equals(level))
+                .map(User::getUserRef)
+                .toList();
+    }
+
+    public List<String> getAllStudentOfSpecificGroup(Group group) {
+        return getAllStudent().stream().filter(s -> s.getGroup().equals(group))
+                .map(User::getUserRef)
+                .toList();
     }
 
     public Student addStudent(Student student) {
