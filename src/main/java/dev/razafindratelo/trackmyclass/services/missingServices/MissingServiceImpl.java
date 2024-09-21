@@ -1,7 +1,7 @@
 package dev.razafindratelo.trackmyclass.services.missingServices;
 
 import dev.razafindratelo.trackmyclass.dao.MissingDAO;
-import dev.razafindratelo.trackmyclass.dto.MissingDTO;
+import dev.razafindratelo.trackmyclass.dto.GeneralMissingDTO;
 import dev.razafindratelo.trackmyclass.entity.attendances.Missing;
 import dev.razafindratelo.trackmyclass.entity.course.Course;
 import dev.razafindratelo.trackmyclass.entity.matchers.MissingMatcher;
@@ -26,7 +26,7 @@ public class MissingServiceImpl implements MissingService {
 
     @Override
     public List<MissingMatcher> findAllMissing() {
-        List<String> studentRef = studentService.getAllStudentsRef();
+        List<String> studentRef = studentService.findAllStudentRef();
         List<MissingMatcher> missingList = new ArrayList<>();
 
         for (String std : studentRef) {
@@ -57,23 +57,32 @@ public class MissingServiceImpl implements MissingService {
     }
 
     @Override
-    public List<MissingMatcher> addJustifiedMissing(List<String> std, MissingDTO missingDTO, String responsibleRef) {
-        std = std.stream().filter(studentService::checkIfStudentExists).toList();
+    public List<MissingMatcher> addMissing(
+            List<String> missingSTDs,
+            GeneralMissingDTO generalMissingDTO,
+            String responsibleRef,
+            boolean isJustified
+    ) {
+        String levelYear = courseService.getCourseLevelYear(generalMissingDTO.getCourseName()).toString();
+
+        missingSTDs = missingSTDs
+                .stream()
+                .filter(std -> studentService.checkIfStudentExistsByLevelYear(levelYear, std)).toList();
 
         Teacher responsible = teacherService.findTeacherById(responsibleRef);
-        Course course = courseService.getCourseByName(missingDTO.getCourseName());
+        Course course = courseService.getCourseByName(generalMissingDTO.getCourseName());
 
         List<MissingMatcher> result = new ArrayList<>();
 
-        for(String stdRef : std) {
+        for(String stdRef : missingSTDs) {
             Student student = studentService.findStudentById(stdRef);
             Missing missing = missingDAO.addMissing(
                     stdRef,
                     course,
                     responsible,
-                    missingDTO.getCommencement(),
-                    missingDTO.getTermination(),
-                    true
+                    generalMissingDTO.getCommencement(),
+                    generalMissingDTO.getTermination(),
+                    isJustified
             );
             result.add(new MissingMatcher(student, List.of(missing)));
         }
@@ -81,29 +90,21 @@ public class MissingServiceImpl implements MissingService {
     }
 
     @Override
-    public List<MissingMatcher> addUnjustifiedMissing(List<String> std, MissingDTO missingDTO, String responsibleRef) {
-        std = std.stream().filter(studentService::checkIfStudentExists).toList();
+    public List<MissingMatcher> completeMissing(
+            GeneralMissingDTO generalMissingDTO,
+            String responsibleRef,
+            List<String> justifiedMissingSTDs,
+            List<String> unjustifiedMissingSTDs
+    ) {
+        List<MissingMatcher> missingMatchers = new ArrayList<>();
 
-        Teacher responsible = teacherService.findTeacherById(responsibleRef);
-        Course course = courseService.getCourseByName(missingDTO.getCourseName());
+        missingMatchers.addAll(addMissing(justifiedMissingSTDs, generalMissingDTO, responsibleRef, true));
+        missingMatchers.addAll(addMissing(unjustifiedMissingSTDs, generalMissingDTO, responsibleRef, false));
 
-        List<MissingMatcher> result = new ArrayList<>();
-
-        for(String stdRef : std) {
-            Student student = studentService.findStudentById(stdRef);
-            Missing missing = missingDAO.addMissing(
-                    stdRef,
-                    course,
-                    responsible,
-                    missingDTO.getCommencement(),
-                    missingDTO.getTermination(),
-                    false
-            );
-            result.add(new MissingMatcher(student, List.of(missing)));
-        }
-        return result;
+        return missingMatchers;
     }
 
+    @Override
     public MissingMatcher findAllStudentMissingByCourse(String studentRef, String courseName, String condition) {
         Student student = studentService.findStudentById(studentRef);
         MissingMatcher res = null;
