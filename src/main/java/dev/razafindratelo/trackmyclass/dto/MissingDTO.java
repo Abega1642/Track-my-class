@@ -12,9 +12,9 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 public class MissingDTO {
-    private String responsibleRef;
     private String courseName;
     private LocalDateTime commencement;
     private LocalDateTime termination;
-    private List<String> stdList;
+    private List<String> stdsWithMissingJustification;
+    private List<String> stdsWithoutMissingJustification;
 }
