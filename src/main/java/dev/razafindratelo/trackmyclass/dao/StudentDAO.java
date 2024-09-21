@@ -160,7 +160,7 @@ public class StudentDAO {
                                          email = ?,
                                          level_year = ?,
                                          "group" = ?
-                                    WHERE std_ref = ?
+                                     WHERE std_ref = ?
                                  """
                            );
             update.setString(1, student.getLastName());
@@ -169,7 +169,7 @@ public class StudentDAO {
             update.setString(4, student.getEmail());
             update.setString(5, student.getLevel().toString());
             update.setString(6, student.getGroup().toString());
-            update.setString(7, student.getUserRef());
+            update.setString(7, std);
 
             update.executeUpdate();
 
