@@ -16,4 +16,8 @@ public interface StudentService {
     List<String> getAllStudentsRef();
 
     boolean checkIfStudentExists(String std);
+
+    List<String> filterExistingStudents(List<String> STDs);
+
+    List<String> filterPresentStds(List<String> STDs);
 }

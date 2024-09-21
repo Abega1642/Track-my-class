@@ -59,4 +59,14 @@ public class StudentServiceImpl implements StudentService {
     public boolean checkIfStudentExists(String std) {
         return getAllStudentsRef().contains(std);
     }
+
+    @Override
+    public List<String> filterExistingStudents(List<String> STDs) {
+        return STDs.stream().filter(this::checkIfStudentExists).toList();
+    }
+
+    @Override
+    public List<String> filterPresentStds(List<String> STDs) {
+        return getAllStudentsRef().stream().filter(s -> !STDs.contains(s)).toList();
+    }
 }
