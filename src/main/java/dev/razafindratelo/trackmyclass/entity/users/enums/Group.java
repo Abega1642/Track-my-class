@@ -8,10 +8,14 @@ public enum Group {
     J2(Level.L1),
     H1(Level.L2),
     H2(Level.L2),
-    G1(Level.L3),;
+    G1(Level.L3);
 
-    final Level level;
+    private Level level;
     Group(Level level) {
+        this.level = level;
+    }
+
+    public void setLevel(Level level) {
         this.level = level;
     }
 }
