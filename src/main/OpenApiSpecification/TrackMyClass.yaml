@@ -3,8 +3,282 @@ info:
   title: Track My Class API
   version: "1.0.0"
 servers:
-  - url: http://localhost:8080
+    - url: http://localhost:8080
 paths:
+  /students:
+    get:
+      tags:
+        - Student
+      summary: get all students
+      operationId: findAllStudent
+      responses:
+        200:
+          description: list of all students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Student"
+  /student/{std}:
+    get:
+      tags:
+        - Student
+      summary: get all student general information by id
+      operationId: getStudentInfo
+      parameters:
+        - $ref: "#/components/parameters/std"
+      responses:
+        '200':
+          description: all general information about the student
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Student"
+
+  /student/add:
+    post:
+      tags:
+        - Student
+      summary: add a new student to database
+      operationId: addStudent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Student"
+      responses:
+        201:
+          description: student created successfully in the database
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Student"
+
+  /student/{std}/update:
+    put:
+      tags:
+        - Student
+      summary: update a student integrally
+      operationId: updateStudentIntegrally
+      parameters:
+        - $ref: "#/components/parameters/std"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Student"
+      responses:
+        200:
+          description: the updated student
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Student"
+    patch:
+      tags:
+        - Student
+      summary: update a student integrally
+      operationId: updateStudentIntegrally
+      parameters:
+        - $ref: "#/components/parameters/std"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Student"
+      responses:
+        200:
+          description: the updated student
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Student"
+  /student/delete/{std}:
+    delete:
+      tags:
+        - Student
+      summary: delete a specific student by std
+      operationId: deleteStudentById
+      parameters:
+        - $ref: "#/components/parameters/std"
+      responses:
+        200:
+          description: the deleted student
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Student"
+
+  /teachers:
+    get:
+      tags:
+        - Teacher
+      summary: get all teachers
+      operationId: getAllTeachers
+      responses:
+        200:
+          description: list off all teachers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Teacher"
+
+  /teacher/{teacherRef}:
+    get:
+      tags:
+        - Teacher
+      summary: get all info of a specific teacher
+      operationId: getTeacherById
+      parameters:
+        - $ref: "#/components/parameters/teacherRef"
+      responses:
+        200:
+          description: all info corresponding to the teacher reference
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Teacher"
+  /teacher/add:
+    post:
+      tags:
+        - Teacher
+      summary: add new teacher
+      operationId: addTeacher
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Teacher"
+      responses:
+        201:
+          description: the added teacher
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Teacher"
+
+  /teacher/{teacherRef}/update:
+    put:
+      tags:
+        - Teacher
+      summary: update teacher infos
+      operationId: updateTeacherById
+      parameters:
+        - $ref: "#/components/parameters/teacherRef"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Teacher"
+      responses:
+        200:
+          description: teacher infos updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Teacher"
+
+    patch:
+      tags:
+        - Teacher
+      summary: update partial teacher info
+      operationId: updateTeacherPartialById
+      parameters:
+        - $ref: "#/components/parameters/teacherRef"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Teacher"
+      responses:
+        200:
+          description: teacher infos updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Teacher"
+
+  /teacher/delete/{teacherRef}:
+    delete:
+      tags:
+        - Teacher
+      summary: delete a specific teacher
+      operationId: deleteTeacher
+      parameters:
+        - $ref: "#/components/parameters/teacherRef"
+      responses:
+        200:
+          description: the deleted teacher
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Teacher"
+
+  /student/attendances:
+    get:
+      tags:
+        - Attendance
+      operationId: getAllAttendances
+      summary: get all attendances of all students
+      responses:
+        200:
+          description: list of all attendances of all students for every coures
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Attendance"
+  /student/{std}/attendances:
+    get:
+      tags:
+        - Attendance
+      operationId: getAttendancesByStudentId
+      summary: get a student attendances
+      parameters:
+        - $ref: "#/components/parameters/std"
+      responses:
+        200:
+          description: an object that contains the student infos and list of all his/her attendances
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/AttendanceMatcher"
+  /teacher/{teacherRef}/attendances:
+    post:
+      tags:
+        - Attendance
+      operationId: doAttendance
+      summary: do an attendance of a course
+      parameters:
+        - $ref: "#/components/parameters/teacherRef"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Missings"
+      responses:
+        201:
+          description: lists of the attendances done (with missing)
+
   /student/missing:
     get:
       tags:
@@ -56,7 +330,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/MissingMatcher"
-
   /student/{std}/missing:
     get:
       tags:
@@ -76,24 +349,6 @@ paths:
               schema:
                 type: object
                 $ref: "#/components/schemas/MissingMatcher"
-
-  /student/{std}:
-    get:
-      tags:
-        - Student
-      summary: get all student general information by its id
-      operationId: getStudentInfo
-      parameters:
-        - $ref: "#/components/parameters/std"
-      responses:
-        '200':
-          description: all general information about the student
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/Student"
-    
   /student/delays:
     get:
       tags:
@@ -110,7 +365,6 @@ paths:
                 items:
                   type: object
                   $ref: "#/components/schemas/DelayMatcher"
-
   /student/{std}/delays:
     get:
       tags:
@@ -126,103 +380,6 @@ paths:
               schema:
                 type: object
                 $ref: "#/components/schemas/DelayMatcher"
-
-  /student/add:
-    post:
-      tags:
-        - Student
-      summary: add a new student to database
-      operationId: addStudent
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              $ref: "#/components/schemas/Student"
-      responses:
-        201:
-          description: student created successfully in the database
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/Student"
-
-  /teachers:
-    get:
-      tags:
-        - Teacher
-      summary: get all teachers
-      operationId: getAllTeachers
-      responses:
-        200:
-          description: list off all teachers
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Teacher"
-
-  /teacher/{teacherRef}:
-    get:
-      tags:
-        - Teacher
-      summary: get all info of a specific teacher
-      operationId: getTeacherById
-      parameters:
-        - $ref: "#/components/parameters/teacherRef"
-      responses:
-        200:
-          description: all info corresponding to the teacher reference
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Teacher"
-
-  /teacher/{teacherRef}/update:
-    post:
-      tags:
-        - Teacher
-      summary: update teacher infos
-      operationId: updateTeacherById
-      parameters:
-        - $ref: "#/components/parameters/teacherRef"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Teacher"
-      responses:
-        200:
-          description: teacher infos updated
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Teacher"
-
-    patch:
-      tags:
-        - Teacher
-      summary: update partial teacher info
-      operationId: updateTeacherPartialById
-      parameters:
-        - $ref: "#/components/parameters/teacherRef"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Teacher"
-      responses:
-        200:
-          description: teacher infos updated
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Teacher"
-
-
 
 components:
   parameters:
@@ -361,7 +518,15 @@ components:
       properties:
         student:
           $ref: "#/components/schemas/Student"
-
+    AttendanceMatcher :
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/GenericAttendanceMatcher"
+        - properties:
+            attendances:
+              type: array
+              items:
+                $ref: "#/components/schemas/Attendance"
     MissingMatcher:
       type: object
       allOf:
@@ -380,4 +545,25 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/Delay"
-
+    Missings:
+      type: object
+      properties:
+        courseName:
+          type: string
+          example: "PROG2"
+        commencement:
+          type: string
+          format: date-time
+        termination:
+          type: string
+          format: date-time
+        stdsWithMissingJustification:
+          type: array
+          items:
+            $ref: "#/components/parameters/std"
+          description: contains all list of STDs of students that are missing during the course WITH missing justification pieces
+        stdsWithoutMissingJustification:
+          type: array
+          items:
+            $ref: "#/components/parameters/std"
+          description: contains all list of STDs of students that are missing during the course WITHOUT missing justification pieces
