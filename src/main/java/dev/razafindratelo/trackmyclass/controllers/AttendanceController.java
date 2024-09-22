@@ -1,4 +1,5 @@
 package dev.razafindratelo.trackmyclass.controllers;
+import dev.razafindratelo.trackmyclass.dto.AttendanceDTO;
 import dev.razafindratelo.trackmyclass.dto.GeneralMissingDTO;
 import dev.razafindratelo.trackmyclass.dto.GroupMissingDTO;
 import dev.razafindratelo.trackmyclass.entity.attendances.Attendance;
@@ -27,14 +28,14 @@ public class AttendanceController {
         return ResponseEntity.ok(attendanceService.findAttendancesByStudentRef(std));
     }
 
-    @PostMapping("/teacher/{teacherRef}/attendance/add/{std}")
-    public ResponseEntity<AttendanceMatcher> addStudentAttendance(
+    @PostMapping("/teacher/{teacherRef}/attendances/add")
+    public ResponseEntity<List<AttendanceMatcher>> addStudentsAttendance(
             @PathVariable("teacherRef") String teacherRef,
             @PathVariable("std") String std,
-            @RequestBody Attendance attendance
+            @RequestBody AttendanceDTO attendance
     ) {
         return new ResponseEntity<>(
-                attendanceService.addStudentAttendance(std, attendance),
+                attendanceService.addStudentsAttendance(attendance),
                 HttpStatus.CREATED
         );
     }
