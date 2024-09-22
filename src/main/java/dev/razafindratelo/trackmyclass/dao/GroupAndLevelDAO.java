@@ -43,6 +43,11 @@ public class GroupAndLevelDAO {
                 .filter(level -> !level.equals(Level.D1))
                 .toList();
     }
+
+    public List<Group> allGroups() {
+        return Arrays.stream(Group.values()).toList();
+    }
+
     public List<LevelGroupMatcher> getAllRelationOfLeveAndGroup() {
         try {
             PreparedStatement getAll = dbConnection
