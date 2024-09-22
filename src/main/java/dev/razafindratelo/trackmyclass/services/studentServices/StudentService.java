@@ -1,5 +1,6 @@
 package dev.razafindratelo.trackmyclass.services.studentServices;
 
+import dev.razafindratelo.trackmyclass.entity.matchers.LevelGroupMatcher;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -42,4 +43,6 @@ public interface StudentService {
     Student updateStudentIntegrally(String std, Student student);
 
     Student updateStudentPartially(String std, Student student) throws NoSuchFieldException, IllegalAccessException;
+
+    List<Student> updateLevels(List<LevelGroupMatcher> groupAndLevelRelations, List<String> STDs);
 }

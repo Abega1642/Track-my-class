@@ -1,6 +1,7 @@
 package dev.razafindratelo.trackmyclass.services.studentServices;
 
 import dev.razafindratelo.trackmyclass.dao.StudentDAO;
+import dev.razafindratelo.trackmyclass.entity.matchers.LevelGroupMatcher;
 import dev.razafindratelo.trackmyclass.entity.mergers.StudentMerger;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
 import dev.razafindratelo.trackmyclass.entity.users.enums.Group;
@@ -170,5 +171,25 @@ public class StudentServiceImpl implements StudentService {
         studentMerger.mergeFields(student, studentToBeUpdated);
 
         return studentDAO.integralUpdateStudent(std, studentToBeUpdated);
+    }
+
+    @Override
+    public List<Student> updateLevels(List<LevelGroupMatcher> groupAndLevelRelations, List<String> STDs) {
+        List<Student> students = findAllStudents()
+                .stream()
+                .filter(student -> !STDs.contains(student.getUserRef()))
+                .toList();
+
+        for (Student student : students) {
+            Group group = student.getGroup();
+            Level level = groupAndLevelRelations
+                    .stream()
+                    .filter(lvl -> lvl.getGroup().equals(group))
+                    .toList()
+                    .getFirst().getLevel();
+            student.setLevel(level);
+            updateStudentIntegrally(student.getUserRef(), student);
+        }
+        return students;
     }
 }
