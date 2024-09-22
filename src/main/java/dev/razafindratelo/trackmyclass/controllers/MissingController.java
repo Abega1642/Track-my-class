@@ -1,13 +1,12 @@
 package dev.razafindratelo.trackmyclass.controllers;
 
+import dev.razafindratelo.trackmyclass.dto.GeneralMissingDTO;
 import dev.razafindratelo.trackmyclass.entity.matchers.MissingMatcher;
 import dev.razafindratelo.trackmyclass.services.missingServices.MissingService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,5 +37,15 @@ public class MissingController {
             @RequestParam(value = "is_justified", required = false) String condition
     ) {
         return ResponseEntity.ok(missingService.findMissingByStudent(std, condition));
+    }
+
+    @PostMapping("/missing/add/student")
+    public ResponseEntity<List<MissingMatcher>> addStudentsMissing(
+            @RequestBody GeneralMissingDTO missing
+    ) {
+        return new ResponseEntity<>(
+                missingService.completeMissing(missing),
+                HttpStatus.CREATED
+        );
     }
 }
