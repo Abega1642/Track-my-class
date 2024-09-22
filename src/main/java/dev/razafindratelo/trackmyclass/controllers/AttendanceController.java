@@ -1,5 +1,6 @@
 package dev.razafindratelo.trackmyclass.controllers;
 import dev.razafindratelo.trackmyclass.dto.GeneralMissingDTO;
+import dev.razafindratelo.trackmyclass.dto.GroupMissingDTO;
 import dev.razafindratelo.trackmyclass.entity.attendances.Attendance;
 import dev.razafindratelo.trackmyclass.entity.matchers.AttendanceMatcher;
 import dev.razafindratelo.trackmyclass.entity.matchers.GenericAttendanceMatcher;
@@ -38,17 +39,25 @@ public class AttendanceController {
         );
     }
 
-    @PostMapping("/teacher/{teacherRef}/attendances/add")
+    @PostMapping("/teacher/{teacherRef}/attendances/add/level")
     public ResponseEntity<List<GenericAttendanceMatcher<?>>> doAttendanceByLevelYear(
             @PathVariable("teacherRef") String teacherRef,
-            @RequestBody GeneralMissingDTO generalMissingDTO,
-            @RequestParam("type") String type
+            @RequestBody GeneralMissingDTO generalMissingDTO
     ){
-
         return new ResponseEntity<>(
-                attendanceService.handleAttendances(teacherRef, generalMissingDTO, type),
+                attendanceService.doAttendanceByLevelYear(teacherRef, generalMissingDTO),
                 HttpStatus.CREATED
         );
+    }
 
+    @PostMapping("/teacher/{teacherRef}/attendances/add/group")
+    public ResponseEntity<List<GenericAttendanceMatcher<?>>> doAttendanceByLevelYear(
+            @PathVariable("teacherRef") String teacherRef,
+            @RequestBody GroupMissingDTO groupMissingDTO
+    ){
+        return new ResponseEntity<>(
+                attendanceService.doAttendanceByGroup(teacherRef, groupMissingDTO),
+                HttpStatus.CREATED
+        );
     }
 }
