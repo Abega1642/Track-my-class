@@ -1,6 +1,7 @@
 package dev.razafindratelo.trackmyclass.services.attendanceServices;
 
 import dev.razafindratelo.trackmyclass.dao.AttendanceDAO;
+import dev.razafindratelo.trackmyclass.dto.AttendanceDTO;
 import dev.razafindratelo.trackmyclass.dto.GeneralMissingDTO;
 import dev.razafindratelo.trackmyclass.dto.GroupMissingDTO;
 import dev.razafindratelo.trackmyclass.entity.attendances.Attendance;
@@ -64,6 +65,21 @@ public class AttendanceServiceImpl implements AttendanceService {
                 student,
                 List.of(attendances)
         );
+    }
+
+    @Override
+    public List<AttendanceMatcher> addStudentsAttendance(AttendanceDTO attendances) {
+        List<AttendanceMatcher> attendanceMatchers = new ArrayList<>();
+
+        Attendance theAttendance = attendances.getAttendance();
+        List<String> STDs = attendances.getSTDs();
+
+        for(String std: STDs) {
+            AttendanceMatcher attendance = addStudentAttendance(std, theAttendance);
+            attendanceMatchers.add(attendance);
+        }
+
+        return attendanceMatchers;
     }
 
     @Override
