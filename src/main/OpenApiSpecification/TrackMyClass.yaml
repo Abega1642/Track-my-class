@@ -301,7 +301,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/GeneralMissings"
+              $ref: "#/components/schemas/GeneralAttendance"
       responses:
         201:
           description: lists of the attendances done (with missing)
@@ -318,7 +318,7 @@ paths:
     post:
       tags:
         - Attendance
-      operationId: doAttendanceByLevelGroup
+      operationId: doAttendanceByGroup
       summary: do an attendance of a course of a concerned specific group
       description: "This handle the attendance of a the whole student a specific group. 
       Example: Doing attendance of J1 PROG2 course. This allows the attendance for 'J1' only by just providing all missing STDs"
@@ -327,7 +327,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/GroupMissings"
+              $ref: "#/components/schemas/GroupAttendance"
       responses:
         201:
           description: lists of the attendances done (with missing)
@@ -339,6 +339,7 @@ paths:
                   oneOf:
                     - $ref: "#/components/schemas/AttendanceMatcher"
                     - $ref: "#/components/schemas/MissingMatcher"
+                    - $ref: "#/components/schemas/DelayMatcher"
 
   /student/missing:
     get:
@@ -456,6 +457,8 @@ paths:
       summary: get all delays of a student
       operationId: getStudentDelays
       description: get list of all delays of a specific student by his or her id
+      parameters:
+        - $ref: "#/components/parameters/std"
       responses:
         200:
           description: an object that contains the list of all delays of the pre-defined student
@@ -464,6 +467,29 @@ paths:
               schema:
                 type: object
                 $ref: "#/components/schemas/DelayMatcher"
+
+  /delay/add/student:
+    post:
+      tags:
+        - Delay
+      summary: add students delays
+      description: This allows to add delays of students by their STDs and their lateness during a course
+      operationId: addDelays
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Delays"
+      responses:
+        201:
+          description: list of all delays that have been created according to the given list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DelayMatcher"
 
 components:
   parameters:
@@ -506,18 +532,23 @@ components:
         userRef:
           type: string
           example: "STD23028"
+          nullable: true
         lastName:
           type: string
           example: "RAZAFINDRATELO"
+          nullable: true
         firstName:
           type: string
           example: "Abegà"
+          nullable: true
         email:
           type: string
           example: "hei.abega.2@gmail.com"
+          nullable: true
         phoneNumber:
           type: string
           example: "+261382269435"
+          nullable: true
 
     Student:
       type: object
@@ -530,6 +561,7 @@ components:
                 - "L1"
                 - "L2"
                 - "L3"
+              nullable: true
             group:
               type: string
               enum:
@@ -538,6 +570,7 @@ components:
                 - "H1"
                 - "H2"
                 - "G1"
+              nullable: true
 
     Teacher:
       type: object
@@ -630,6 +663,15 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/Delay"
+    StudentDelay:
+      type: object
+      properties:
+        std:
+          type: string
+          example: "STD23028"
+        lateness:
+          type: string
+          format: date-time
 
     AbstractAttendance:
       type: object
@@ -643,6 +685,20 @@ components:
         termination:
           type: string
           format: date-time
+
+    Delays:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/AbstractAttendance"
+        - properties:
+            delays:
+              type: array
+              items:
+                $ref: "#/components/schemas/StudentDelay"
+            responsibleRef:
+              type: string
+              example: "TCH21001"
+
 
     Attendances:
       type: object
@@ -678,11 +734,21 @@ components:
             responsibleRef:
               type: string
               example: "TCH23028"
-    GroupMissings:
+    GeneralAttendance:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/GeneralMissings"
+        - properties:
+            studentDelays:
+              type: array
+              items:
+                $ref: "#/components/schemas/StudentDelay"
+
+    GroupAttendance:
       type: object
       allOf:
         - properties:
             group:
               type: string
               example: "J1"
-        - $ref: "#/components/schemas/GeneralMissings"
+        - $ref: "#/components/schemas/GeneralAttendance"
