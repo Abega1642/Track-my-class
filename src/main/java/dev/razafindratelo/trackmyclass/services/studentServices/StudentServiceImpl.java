@@ -8,6 +8,7 @@ import dev.razafindratelo.trackmyclass.entity.users.enums.Level;
 import dev.razafindratelo.trackmyclass.exceptionHandler.IllegalRequestException;
 import dev.razafindratelo.trackmyclass.exceptionHandler.ResourceDuplicatedException;
 import dev.razafindratelo.trackmyclass.exceptionHandler.ResourceNotFoundException;
+import dev.razafindratelo.trackmyclass.services.groupAndLevelServices.GroupAndLevelService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.Objects;
 public class StudentServiceImpl implements StudentService {
     private StudentDAO studentDAO;
     private StudentMerger studentMerger;
+    private GroupAndLevelService groupAndLevelService;
 
     @Override
     public Student findStudentById(String std) {
@@ -117,10 +119,13 @@ public class StudentServiceImpl implements StudentService {
                         || student.getPhoneNumber() == null
         ) {
             throw new IllegalRequestException("Student attributes must not be null");
-        }
-        return studentDAO.addStudent(student);
-    }
 
+        } else if(groupAndLevelService.checkLevelAndGroupMap(student.getGroup(), student.getLevel())) {
+            return studentDAO.addStudent(student);
+        } else {
+            throw new IllegalRequestException("Please check your student request body fields");
+        }
+    }
 
     @Override
     public Student deleteStudent(String std) {
@@ -148,13 +153,15 @@ public class StudentServiceImpl implements StudentService {
                 || student.getPhoneNumber() == null
         ) {
             throw new IllegalRequestException("Student attributes must not be null");
+        } else if (groupAndLevelService.checkLevelAndGroupMap(student.getGroup(), student.getLevel())) {
+            return studentDAO.integralUpdateStudent(std, student);
+        } else {
+            throw new IllegalRequestException("Please check your student request body fields");
         }
-        return studentDAO.integralUpdateStudent(std, student);
     }
 
     @Override
-    public Student updateStudentPartially(String std, Student student)
-            throws NoSuchFieldException, IllegalAccessException {
+    public Student updateStudentPartially(String std, Student student) {
 
         Student studentToBeUpdated = findStudentById(std);
         if(student == null) {
