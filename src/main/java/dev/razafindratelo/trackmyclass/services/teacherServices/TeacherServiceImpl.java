@@ -48,6 +48,13 @@ public class TeacherServiceImpl implements TeacherService {
             throw new IllegalRequestException("Teacher must not be null");
         } else if (findAllTeachersRef().contains(teacher.getUserRef())) {
             throw new ResourceDuplicatedException("Teacher with id :" + teacher.getUserRef() + " already exists");
+        } else if (
+                teacher.getUserRef() == null
+                || teacher.getEmail() == null
+                || teacher.getLastName() == null
+                || teacher.getPhoneNumber() == null
+        ) {
+            throw new IllegalRequestException("Teachers attributes must not be null except the firstname");
         }
         teacher.setUserRef(teacher.getUserRef().toUpperCase());
         return teacherDAO.addTeacher(teacher);
@@ -57,6 +64,13 @@ public class TeacherServiceImpl implements TeacherService {
     public Teacher updateTeacher(String teacherRef, Teacher teacher) {
         if (teacher == null || teacherRef == null || teacherRef.isEmpty()) {
             throw new IllegalRequestException("Teacher must not be null");
+        } else if (
+                teacher.getUserRef() == null
+               || teacher.getEmail() == null
+               || teacher.getLastName() == null
+               || teacher.getPhoneNumber() == null
+        ) {
+            throw new IllegalRequestException("Teachers attributes must not be null except the firstname");
         }
         Teacher updatedTeacher = teacherDAO.integralUpdateTeacher(teacherRef.toUpperCase(), teacher);
         if(updatedTeacher == null) {
@@ -66,8 +80,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Teacher partialTeacherUpdate(String teacherRef, Teacher teacher)
-            throws NoSuchFieldException, IllegalAccessException {
+    public Teacher partialTeacherUpdate(String teacherRef, Teacher teacher) {
         if (teacher == null || teacherRef == null || teacherRef.isEmpty()) {
             throw new IllegalRequestException("Teacher must not be null");
         }
