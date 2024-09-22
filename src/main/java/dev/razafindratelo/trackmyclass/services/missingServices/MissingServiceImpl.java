@@ -60,7 +60,6 @@ public class MissingServiceImpl implements MissingService {
     public List<MissingMatcher> addMissing(
             List<String> missingSTDs,
             GeneralMissingDTO generalMissingDTO,
-            String responsibleRef,
             boolean isJustified
     ) {
         String levelYear = courseService.getCourseLevelYear(generalMissingDTO.getCourseName()).toString();
@@ -69,7 +68,7 @@ public class MissingServiceImpl implements MissingService {
                 .stream()
                 .filter(std -> studentService.checkIfStudentExistsByLevelYear(levelYear, std)).toList();
 
-        Teacher responsible = teacherService.findTeacherById(responsibleRef);
+        Teacher responsible = teacherService.findTeacherById(generalMissingDTO.getResponsibleRef());
         Course course = courseService.getCourseByName(generalMissingDTO.getCourseName());
 
         List<MissingMatcher> result = new ArrayList<>();
@@ -91,15 +90,12 @@ public class MissingServiceImpl implements MissingService {
 
     @Override
     public List<MissingMatcher> completeMissing(
-            GeneralMissingDTO generalMissingDTO,
-            String responsibleRef,
-            List<String> justifiedMissingSTDs,
-            List<String> unjustifiedMissingSTDs
+            GeneralMissingDTO generalMissingDTO
     ) {
         List<MissingMatcher> missingMatchers = new ArrayList<>();
 
-        missingMatchers.addAll(addMissing(justifiedMissingSTDs, generalMissingDTO, responsibleRef, true));
-        missingMatchers.addAll(addMissing(unjustifiedMissingSTDs, generalMissingDTO, responsibleRef, false));
+        missingMatchers.addAll(addMissing(generalMissingDTO.getStdsWithMissingJustification(), generalMissingDTO, true));
+        missingMatchers.addAll(addMissing(generalMissingDTO.getStdsWithoutMissingJustification(), generalMissingDTO, false));
 
         return missingMatchers;
     }
@@ -108,21 +104,27 @@ public class MissingServiceImpl implements MissingService {
     public MissingMatcher findAllStudentMissingByCourse(String studentRef, String courseName, String condition) {
         Student student = studentService.findStudentById(studentRef);
         MissingMatcher res = null;
+
         if(condition != null) {
             if(condition.equalsIgnoreCase("yes")
                     || condition.equalsIgnoreCase("y")) {
                 res = missingDAO.getStudentJustifiedMissing(student);
+
                 List<Missing> missing = res.getAttendances()
                         .stream().filter(mis -> mis.getCourse().getName().equalsIgnoreCase(courseName))
                         .toList();
+
                 res.setAttendances(missing);
+
                 return res;
             } else if (condition.equalsIgnoreCase("no")
                     || condition.equalsIgnoreCase("n")) {
                 res = missingDAO.getStudentNonJustifiedMissing(student);
+
                 List<Missing> missing = res.getAttendances()
                         .stream().filter(mis -> mis.getCourse().getName().equalsIgnoreCase(courseName))
                         .toList();
+
                 res.setAttendances(missing);
 
                 return res;
@@ -144,12 +146,14 @@ public class MissingServiceImpl implements MissingService {
     ) {
         MissingMatcher res = findAllStudentMissingByCourse(studentRef, courseName, condition);
         List<Missing> missing = res.getAttendances();
+
         if(month == null && year == null) {
             missing = missing
                     .stream().filter(
                             mis -> mis.getCommencement().getMonthValue()== LocalDateTime.now().getMonthValue()
                                     && mis.getCommencement().getYear() == LocalDateTime.now().getYear()
                     ).toList();
+
             res.setAttendances(missing);
 
         } else if (month == null) {
@@ -158,6 +162,7 @@ public class MissingServiceImpl implements MissingService {
                             mis -> mis.getCommencement().getMonthValue()== LocalDateTime.now().getMonthValue()
                                     && mis.getCommencement().getYear() == year
                     ).toList();
+
             res.setAttendances(missing);
         } else if (year == null) {
             missing = missing
@@ -165,6 +170,7 @@ public class MissingServiceImpl implements MissingService {
                             mis -> mis.getCommencement().getMonthValue()== month
                                     && mis.getCommencement().getYear() == LocalDateTime.now().getYear()
                     ).toList();
+
             res.setAttendances(missing);
         } else {
             missing = missing
@@ -173,6 +179,7 @@ public class MissingServiceImpl implements MissingService {
                                     && mis.getCommencement().getYear() == year
                     ).toList();
         }
+
         res.setAttendances(missing);
         return res;
     }

@@ -24,14 +24,8 @@ public interface MissingService {
     List<MissingMatcher> addMissing(
             List<String> missingSTDs,
             GeneralMissingDTO generalMissingDTO,
-            String responsibleRef,
             boolean isJustified
     );
 
-    List<MissingMatcher> completeMissing(
-            GeneralMissingDTO generalMissingDTO,
-            String responsibleRef,
-            List<String> justifiedMissingSTDs,
-            List<String> unjustifiedMissingSTDs
-    );
+    List<MissingMatcher> completeMissing(GeneralMissingDTO generalMissingDTO);
 }
