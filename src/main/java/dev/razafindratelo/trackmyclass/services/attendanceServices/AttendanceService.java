@@ -16,7 +16,6 @@ public interface AttendanceService {
 
     AttendanceMatcher addStudentAttendance(String std, Attendance attendance);
 
-    List<GenericAttendanceMatcher<?>> handleAttendances(String teacherRef, GeneralMissingDTO missing, String type);
 
     List<GenericAttendanceMatcher<?>> doAttendanceByLevelYear(String teacherRef, GeneralMissingDTO missing);
 

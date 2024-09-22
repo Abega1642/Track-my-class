@@ -10,7 +10,6 @@ import dev.razafindratelo.trackmyclass.entity.matchers.GenericAttendanceMatcher;
 import dev.razafindratelo.trackmyclass.entity.matchers.MissingMatcher;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
 import dev.razafindratelo.trackmyclass.entity.users.Teacher;
-import dev.razafindratelo.trackmyclass.exceptionHandler.IllegalRequestException;
 import dev.razafindratelo.trackmyclass.services.courseServices.CourseService;
 import dev.razafindratelo.trackmyclass.services.missingServices.MissingService;
 import dev.razafindratelo.trackmyclass.services.studentServices.StudentService;
@@ -68,18 +67,6 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public List<GenericAttendanceMatcher<?>> handleAttendances(String teacherRef, GeneralMissingDTO missing, String type) {
-        if(type.equalsIgnoreCase("level")) {
-            return doAttendanceByLevelYear(teacherRef, missing);
-        } else if (type.equalsIgnoreCase("group")) {
-            GroupMissingDTO castMissing = (GroupMissingDTO) missing;
-            return doAttendanceByGroup(teacherRef, castMissing);
-        } else {
-            throw new IllegalRequestException("Type should be whether 'level' or 'group'");
-        }
-    }
-
-    @Override
     public List<GenericAttendanceMatcher<?>> doAttendanceByLevelYear(String teacherRef, GeneralMissingDTO missing) {
         String levelYear = courseService.getCourseLevelYear(missing.getCourseName()).toString();
 
@@ -126,7 +113,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         allMissingSTDs.addAll(unjustifiedMissingSTDs);
 
         // list of all student STDs which were present at the course
-        List<String> presentSTDs = studentService.filterExistingStudentByGroup(allMissingSTDs, group);
+        List<String> presentSTDs = studentService.filterPresentStdsByGroup(allMissingSTDs, group);
 
         // list of all attendances (missing & presence)  of all stds
         List<AttendanceMatcher> attendanceMatchers = addStudentsAttendances(presentSTDs, missing, teacherRef);
