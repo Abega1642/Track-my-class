@@ -28,7 +28,7 @@ public class AttendanceController {
         return ResponseEntity.ok(attendanceService.findAttendancesByStudentRef(std));
     }
 
-    @PostMapping("/attendances/add")
+    @PostMapping("/attendances/add/student")
     public ResponseEntity<List<AttendanceMatcher>> addStudentsAttendance(@RequestBody AttendanceDTO attendance) {
         return new ResponseEntity<>(
                 attendanceService.addStudentsAttendance(attendance),
@@ -36,24 +36,21 @@ public class AttendanceController {
         );
     }
 
-    @PostMapping("/teacher/{teacherRef}/attendances/add/level")
+    @PostMapping("attendances/add/level")
     public ResponseEntity<List<GenericAttendanceMatcher<?>>> doAttendanceByLevelYear(
-            @PathVariable("teacherRef") String teacherRef,
             @RequestBody GeneralMissingDTO generalMissingDTO
     ){
         return new ResponseEntity<>(
-                attendanceService.doAttendanceByLevelYear(teacherRef, generalMissingDTO),
+                attendanceService.doAttendanceByLevelYear(generalMissingDTO),
                 HttpStatus.CREATED
         );
     }
-
-    @PostMapping("/teacher/{teacherRef}/attendances/add/group")
+    @PostMapping("attendances/add/group")
     public ResponseEntity<List<GenericAttendanceMatcher<?>>> doAttendanceByGroup(
-            @PathVariable("teacherRef") String teacherRef,
             @RequestBody GroupMissingDTO groupMissingDTO
     ){
         return new ResponseEntity<>(
-                attendanceService.doAttendanceByGroup(teacherRef, groupMissingDTO),
+                attendanceService.doAttendanceByGroup(groupMissingDTO),
                 HttpStatus.CREATED
         );
     }
