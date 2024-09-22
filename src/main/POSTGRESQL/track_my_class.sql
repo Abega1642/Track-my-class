@@ -73,6 +73,11 @@ CREATE TABLE is_present(
 	FOREIGN KEY (tch_ref) REFERENCES Teacher(tch_ref)
 );
 
+CREATE TABLE group_level_matcher(
+    level_year VARCHAR(2) NOT NULL,
+    "group" VARCHAR(2) NOT NULL
+);
+
 
 
 INSERT INTO Student (std_ref, last_name, first_name, email, phone_number, level_year, "group") VALUES
@@ -313,3 +318,9 @@ INSERT INTO is_delayed (std_ref, crs_ref, tch_ref, commencement, termination, la
 ('STD23009', 'L1-009', 'TCH22004', '2024-11-08 08:00:00', '2024-11-08 10:00:00', '2024-11-08 08:10:00'),
 ('STD23010', 'L1-010', 'TCH22005', '2024-11-09 10:00:00', '2024-11-09 12:00:00', '2024-11-09 10:45:00');
 
+INSERT INTO group_level_matcher (level_year, "group") VALUES
+('L1', 'J1'),
+('L1', 'J2'),
+('L2', 'H1'),
+('L2', 'H2'),
+('L3', 'G1');
