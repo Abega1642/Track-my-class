@@ -23,7 +23,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student findStudentById(String std) {
-        Student student =  studentDAO.getStudentById(std);
+        Student student =  studentDAO.getStudentById(std.toUpperCase());
         if (student == null) {
             throw new ResourceNotFoundException("Student with id " + std + " not found");
         } else {

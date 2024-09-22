@@ -25,7 +25,7 @@ public class TeacherServiceImpl implements TeacherService {
         if (teacherRef == null || teacherRef.isEmpty()) {
             throw new IllegalRequestException("Teacher ref must not be null or empty");
         }
-        Teacher teacher = teacherDAO.findTeacherById(teacherRef);
+        Teacher teacher = teacherDAO.findTeacherById(teacherRef.toUpperCase());
         if(teacher == null) {
             throw new ResourceNotFoundException("Teacher not found with id " + teacherRef);
         }
@@ -49,6 +49,7 @@ public class TeacherServiceImpl implements TeacherService {
         } else if (findAllTeachersRef().contains(teacher.getUserRef())) {
             throw new ResourceDuplicatedException("Teacher with id :" + teacher.getUserRef() + " already exists");
         }
+        teacher.setUserRef(teacher.getUserRef().toUpperCase());
         return teacherDAO.addTeacher(teacher);
     }
 
@@ -57,7 +58,7 @@ public class TeacherServiceImpl implements TeacherService {
         if (teacher == null || teacherRef == null || teacherRef.isEmpty()) {
             throw new IllegalRequestException("Teacher must not be null");
         }
-        Teacher updatedTeacher = teacherDAO.integralUpdateTeacher(teacherRef, teacher);
+        Teacher updatedTeacher = teacherDAO.integralUpdateTeacher(teacherRef.toUpperCase(), teacher);
         if(updatedTeacher == null) {
             throw new InternalException("Teacher updated failed");
         }
@@ -83,14 +84,17 @@ public class TeacherServiceImpl implements TeacherService {
             throw new IllegalRequestException("Teacher ref must not be null");
         }
         Teacher teacher = teacherDAO.findTeacherById(teacherRef);
-        return Objects.requireNonNullElseGet(teacher, () -> new Teacher(
-                "-",
-                "NO_MATCH",
-                "NO_MATCH",
-                "NO_MATCH",
-                "NO_MATCH",
-                true
-        ));
+        if(teacher == null) {
+            new Teacher(
+                    "-",
+                    "NO_MATCH",
+                    "NO_MATCH",
+                    "NO_MATCH",
+                    "NO_MATCH",
+                    true
+            );
+        }
+        return teacherDAO.deleteTeacher(teacherRef.toUpperCase());
     }
 
 }
