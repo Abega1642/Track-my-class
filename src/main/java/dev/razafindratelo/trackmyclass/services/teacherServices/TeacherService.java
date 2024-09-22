@@ -11,6 +11,8 @@ public interface TeacherService {
 
     List<Teacher> findAllTeachers();
 
+    List<String> findAllTeachersRef();
+
     Teacher addTeacher(Teacher teacher);
 
     Teacher updateTeacher(String teacherRef, Teacher teacher);

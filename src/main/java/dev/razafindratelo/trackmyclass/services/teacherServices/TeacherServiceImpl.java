@@ -3,8 +3,10 @@ package dev.razafindratelo.trackmyclass.services.teacherServices;
 import dev.razafindratelo.trackmyclass.dao.TeacherDAO;
 import dev.razafindratelo.trackmyclass.entity.mergers.TeacherMerger;
 import dev.razafindratelo.trackmyclass.entity.users.Teacher;
+import dev.razafindratelo.trackmyclass.entity.users.User;
 import dev.razafindratelo.trackmyclass.exceptionHandler.IllegalRequestException;
 import dev.razafindratelo.trackmyclass.exceptionHandler.InternalException;
+import dev.razafindratelo.trackmyclass.exceptionHandler.ResourceDuplicatedException;
 import dev.razafindratelo.trackmyclass.exceptionHandler.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,9 +38,16 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
+    public List<String> findAllTeachersRef() {
+        return findAllTeachers().stream().map(User::getUserRef).toList();
+    }
+
+    @Override
     public Teacher addTeacher(Teacher teacher) {
         if(teacher == null) {
             throw new IllegalRequestException("Teacher must not be null");
+        } else if (findAllTeachersRef().contains(teacher.getUserRef())) {
+            throw new ResourceDuplicatedException("Teacher with id :" + teacher.getUserRef() + " already exists");
         }
         return teacherDAO.addTeacher(teacher);
     }
