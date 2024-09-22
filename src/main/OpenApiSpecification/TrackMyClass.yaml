@@ -491,6 +491,77 @@ paths:
                 items:
                   $ref: "#/components/schemas/DelayMatcher"
 
+  /groups&Levels:
+    get:
+      tags:
+        - Group and Level
+      summary: get all mapping between groups and level years
+      operationId: getGroupAndLevelMapping
+      responses:
+        200:
+          description: get all mappings between a group and a level year
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LevelGroupMatcher"
+  /groups:
+    get:
+      tags:
+        - Group and Level
+      summary: get all available groups
+      operationId: getGroups
+      responses:
+        200:
+          description: list of all available group for all level years
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/group"
+  /levels:
+    get:
+      tags:
+        - Group and Level
+      summary: get all available level year
+      operationId: getLevels
+      responses:
+        200:
+          description: list of all available level years
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/level"
+  /student/upgrade:
+    put:
+      tags:
+        - Group and Level
+      summary: upgrade groups & students to next level year
+      description: "Upgrade every group to next level year and upgrade every student 
+      who is not in the exclude list provided in request body"
+      operationId: upgrade
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/parameters/std"
+              example: ["STD23550", "STD2378895"]
+      responses:
+        200:
+          description: list of all students that have been upgraded
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Student"
+
 components:
   parameters:
     std:
@@ -550,6 +621,21 @@ components:
           example: "+261382269435"
           nullable: true
 
+    level:
+      type: string
+      enum:
+        - "L1"
+        - "L2"
+        - "L3"
+    group:
+      type: string
+      enum:
+        - "J1"
+        - "J2"
+        - "H1"
+        - "H2"
+        - "G1"
+
     Student:
       type: object
       allOf:
@@ -561,7 +647,6 @@ components:
                 - "L1"
                 - "L2"
                 - "L3"
-              nullable: true
             group:
               type: string
               enum:
@@ -570,8 +655,6 @@ components:
                 - "H1"
                 - "H2"
                 - "G1"
-              nullable: true
-
     Teacher:
       type: object
       allOf:
@@ -752,3 +835,9 @@ components:
               type: string
               example: "J1"
         - $ref: "#/components/schemas/GeneralAttendance"
+
+    LevelGroupMatcher:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/level"
+        - $ref: "#/components/schemas/group"
