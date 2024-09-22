@@ -410,6 +410,29 @@ paths:
               schema:
                 type: object
                 $ref: "#/components/schemas/MissingMatcher"
+
+  /missing/add/student:
+    post:
+      tags:
+        - Missing
+      summary: add missing for a give STD list
+      description: Allow to add missing for a given STD list (justified missing or not)
+      operationId: addStudentsMissing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/GeneralMissings"
+      responses:
+        201:
+          description: missing added successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: "#/components/schemas/MissingMatcher"
+
   /student/delays:
     get:
       tags:
