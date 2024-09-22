@@ -114,7 +114,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         // list of all attendances (missing & presence)  of all stds
         List<AttendanceMatcher> attendanceMatchers = addStudentsAttendances(presentSTDs, missing, teacherRef);
         List<MissingMatcher> missingMatchers = missingService
-                .completeMissing(missing, teacherRef, justifiedMissingSTDs, unjustifiedMissingSTDs);
+                .completeMissing(missing);
 
         // result
         return completeAttendances(attendanceMatchers, missingMatchers);
@@ -144,7 +144,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         // list of all attendances (missing & presence)  of all stds
         List<AttendanceMatcher> attendanceMatchers = addStudentsAttendances(presentSTDs, missing, teacherRef);
         List<MissingMatcher> missingMatchers = missingService
-                .completeMissing(missing, teacherRef, justifiedMissingSTDs, unjustifiedMissingSTDs);
+                .completeMissing(missing);
 
         return completeAttendances(attendanceMatchers, missingMatchers);
     }
