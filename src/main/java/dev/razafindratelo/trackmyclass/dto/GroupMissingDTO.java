@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class GroupMissingDTO extends GeneralMissingDTO{
+public final class GroupMissingDTO extends GeneralMissingDTO{
     private final Group group;
 
     public GroupMissingDTO(
@@ -19,9 +19,17 @@ public class GroupMissingDTO extends GeneralMissingDTO{
             LocalDateTime commencement,
             LocalDateTime termination,
             List<String> stdsWithMissingJustification,
-            List<String> stdsWithoutMissingJustification
+            List<String> stdsWithoutMissingJustification,
+            String responsibleRef
     ) {
-        super(courseName, commencement, termination, stdsWithMissingJustification, stdsWithoutMissingJustification);
+        super(
+                courseName,
+                commencement,
+                termination,
+                stdsWithMissingJustification,
+                stdsWithoutMissingJustification,
+                responsibleRef
+        );
         this.group = group;
     }
 }
