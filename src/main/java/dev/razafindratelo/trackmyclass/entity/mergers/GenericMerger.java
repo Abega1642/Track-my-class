@@ -4,14 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public sealed interface GenericMerger<T, G>
-    permits
-        TeacherMerger,
-        StudentMerger,
-        CourseMerger,
-        AttendanceMerger,
-        DelayMerger,
-        MissingMerger
+        permits AttendanceMerger, CourseMerger, DelayMerger, MissingMerger, StudentMerger, TeacherMerger
 {
-
     T mergeFields(T source, G target) throws NoSuchFieldException, IllegalAccessException;
 }

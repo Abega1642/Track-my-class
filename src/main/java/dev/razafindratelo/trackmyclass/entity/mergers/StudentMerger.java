@@ -4,27 +4,30 @@ import dev.razafindratelo.trackmyclass.entity.users.Student;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class StudentMerger implements GenericMerger<Student, Student> {
+public final class StudentMerger implements GenericMerger<Student, Student>{
 
     @Override
-    public Student mergeFields(Student source, Student target) throws NoSuchFieldException, IllegalAccessException {
-        if (source == null || target == null) {
-            throw new IllegalArgumentException("Teacher must not be null");
+    public Student mergeFields(Student source, Student target) {
+        if(source == null || target == null) {
+            throw new IllegalArgumentException("Cannot merge null objects");
         }
-
-        if(source.getLastName() != null) {
+        if(source.getLastName() != null)
             target.setLastName(source.getLastName());
-        } else if (source.getFirstName() != null) {
+
+        if(source.getFirstName() != null)
             target.setFirstName(source.getFirstName());
-        }  else if (source.getEmail() != null) {
+
+        if(source.getEmail() != null)
             target.setEmail(source.getEmail());
-        } else if (source.getPhoneNumber() != null) {
+
+        if(source.getPhoneNumber() != null)
             target.setPhoneNumber(source.getPhoneNumber());
-        } else if (source.getLevel() != null) {
-            target.setLevel(source.getLevel());
-        } else if (source.getGroup()!= null) {
+
+        if (source.getGroup()!= null)
             target.setGroup(source.getGroup());
-        }
+
+        if (source.getLevel() != null)
+            target.setLevel(source.getLevel());
 
         return target;
     }
