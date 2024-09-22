@@ -51,7 +51,7 @@ public class AttendanceController {
     }
 
     @PostMapping("/teacher/{teacherRef}/attendances/add/group")
-    public ResponseEntity<List<GenericAttendanceMatcher<?>>> doAttendanceByLevelYear(
+    public ResponseEntity<List<GenericAttendanceMatcher<?>>> doAttendanceByGroup(
             @PathVariable("teacherRef") String teacherRef,
             @RequestBody GroupMissingDTO groupMissingDTO
     ){

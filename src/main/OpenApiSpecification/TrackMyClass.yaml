@@ -261,12 +261,15 @@ paths:
               schema:
                 type: object
                 $ref: "#/components/schemas/AttendanceMatcher"
-  /teacher/{teacherRef}/attendances:
+  /teacher/{teacherRef}/attendances/add/level:
     post:
       tags:
         - Attendance
-      operationId: doAttendance
-      summary: do an attendance of a course
+      operationId: doAttendanceByLevelYear
+      summary: do an attendance of a course of a the concerned level year
+      description: "This handle the attendance of a the whole student in the concerned level year. 
+      Example: Doing attendance of PROG2 but where all groups such as J1 and J2 are mixed together during the course.
+      This allows the attendance of the 'L1' composed together by just providing all missing STDs"
       parameters:
         - $ref: "#/components/parameters/teacherRef"
       requestBody:
@@ -274,10 +277,42 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/Missings"
+              $ref: "#/components/schemas/GeneralMissings"
       responses:
         201:
           description: lists of the attendances done (with missing)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GeneralMatcher"
+
+  /teacher/{teacherRef}/attendances/add/group:
+    post:
+      tags:
+        - Attendance
+      operationId: doAttendanceByLevelGroup
+      summary: do an attendance of a course of a concerned specific group
+      description: "This handle the attendance of a the whole student a specific group. 
+      Example: Doing attendance of J1 PROG2 course. This allows the attendance for 'J1' only by just providing all missing STDs"
+      parameters:
+        - $ref: "#/components/parameters/teacherRef"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/GroupMissings"
+      responses:
+        201:
+          description: lists of the attendances done (with missing)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GeneralMatcher"
 
   /student/missing:
     get:
@@ -435,7 +470,7 @@ components:
           type: string
           example: "+261382269435"
 
-    Student :
+    Student:
       type: object
       allOf:
         - $ref: "#/components/schemas/User"
@@ -463,7 +498,7 @@ components:
             isAssistant:
               type: boolean
 
-    Course :
+    Course:
       type: object
       properties:
         courseRef:
@@ -518,7 +553,7 @@ components:
       properties:
         student:
           $ref: "#/components/schemas/Student"
-    AttendanceMatcher :
+    AttendanceMatcher:
       type: object
       allOf:
         - $ref: "#/components/schemas/GenericAttendanceMatcher"
@@ -545,7 +580,14 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/Delay"
-    Missings:
+    GeneralMatcher:
+      type: array
+      items:
+        oneOf:
+          - $ref: "#/components/schemas/AttendanceMatcher"
+          - $ref: "#/components/schemas/MissingMatcher"
+
+    GeneralMissings:
       type: object
       properties:
         courseName:
@@ -567,3 +609,11 @@ components:
           items:
             $ref: "#/components/parameters/std"
           description: contains all list of STDs of students that are missing during the course WITHOUT missing justification pieces
+    GroupMissings:
+      type: object
+      allOf:
+        - properties:
+            group:
+              type: string
+              example: "J1"
+        - $ref: "#/components/schemas/GeneralMissings"
