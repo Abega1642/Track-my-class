@@ -88,6 +88,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<String> filterPresentStdsByGroup(List<String> missingSTDs, String group) {
+        return findAllStudentRefByGroup(group).stream().filter(s -> !missingSTDs.contains(s)).toList();
+    }
+
+    @Override
     public List<String> filterExistingStudentByLevelYear(List<String> STDs, String levelYear) {
         return STDs.stream().filter(std -> checkIfStudentExistsByLevelYear(levelYear, std)).toList();
     }

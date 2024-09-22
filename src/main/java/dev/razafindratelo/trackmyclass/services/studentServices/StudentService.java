@@ -33,6 +33,8 @@ public interface StudentService {
 
     List<String> filterPresentStdsByLevelYear(List<String> missingSTDs, String levelYear);
 
+    List<String> filterPresentStdsByGroup(List<String> missingSTDs, String group);
+
     Student insertStudent(Student student);
 
     Student deleteStudent(String std);
