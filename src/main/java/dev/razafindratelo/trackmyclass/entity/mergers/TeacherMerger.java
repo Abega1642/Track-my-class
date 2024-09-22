@@ -24,7 +24,6 @@ public final class TeacherMerger implements GenericMerger<Teacher, Teacher> {
         if(source.getPhoneNumber() != null)
             target.setPhoneNumber(source.getPhoneNumber());
 
-
         if (!target.isAssistant() && source.isAssistant()) {
             target.setAssistant(true);
         }
