@@ -96,14 +96,20 @@ public class TeacherDAO {
                                     ) VALUES (?,?,?,?,?,?)
                                 """
                     );
+            insertion.setString(1, teacher.getUserRef());
+            insertion.setString(2, teacher.getLastName());
+            insertion.setString(3, teacher.getFirstName());
+            insertion.setBoolean(4, teacher.isAssistant());
+            insertion.setString(5, teacher.getEmail());
+            insertion.setString(6, teacher.getPhoneNumber());
+
             insertion.execute();
-            if(insertion.executeUpdate() > 1) {
-                return teacher;
-            }
+
+            return teacher;
+
         } catch(SQLException e) {
             throw new InternalException("Error while adding teacher := " + e.getMessage());
         }
-        return null;
     }
 
     public Teacher integralUpdateTeacher(String teacherRef, Teacher teacher) {
