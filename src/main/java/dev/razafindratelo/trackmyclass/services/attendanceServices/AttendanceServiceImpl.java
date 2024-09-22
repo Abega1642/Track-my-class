@@ -70,8 +70,16 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public List<AttendanceMatcher> addStudentsAttendance(AttendanceDTO attendances) {
         List<AttendanceMatcher> attendanceMatchers = new ArrayList<>();
+        Teacher responsible = teacherService.findTeacherById(attendances.getResponsibleRef());
+        Course course = courseService.getCourseByName(attendances.getCourseName());
 
-        Attendance theAttendance = attendances.getAttendance();
+        Attendance theAttendance = new Attendance(
+                attendances.getCommencement(),
+                attendances.getTermination(),
+                responsible,
+                course
+        );
+
         List<String> STDs = attendances.getSTDs();
 
         for(String std: STDs) {
@@ -83,8 +91,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public List<GenericAttendanceMatcher<?>> doAttendanceByLevelYear(String teacherRef, GeneralMissingDTO missing) {
-        String levelYear = courseService.getCourseLevelYear(missing.getCourseName()).toString();
+    public List<GenericAttendanceMatcher<?>> doAttendanceByLevelYear(GeneralMissingDTO missing) {
+        String levelYear = courseService.getCourseLevelYear(missing.getCourseName()).toString().toUpperCase();
+        String teacherRef = missing.getResponsibleRef().toUpperCase();
 
         // list of justified missing STDs
         List<String> justifiedMissingSTDs = studentService
@@ -112,8 +121,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public List<GenericAttendanceMatcher<?>> doAttendanceByGroup(String teacherRef, GroupMissingDTO missing) {
-        String group = missing.getGroup().toString();
+    public List<GenericAttendanceMatcher<?>> doAttendanceByGroup(GroupMissingDTO missing) {
+        String group = missing.getGroup().toString().toUpperCase();
+        String teacherRef = missing.getResponsibleRef().toUpperCase();
 
         // list of justified missing STDs
         List<String> justifiedMissingSTDs = studentService

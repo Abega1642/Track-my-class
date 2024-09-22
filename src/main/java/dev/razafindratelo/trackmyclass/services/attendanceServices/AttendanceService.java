@@ -19,9 +19,9 @@ public interface AttendanceService {
 
     List<AttendanceMatcher> addStudentsAttendance(AttendanceDTO attendances);
 
-    List<GenericAttendanceMatcher<?>> doAttendanceByLevelYear(String teacherRef, GeneralMissingDTO missing);
+    List<GenericAttendanceMatcher<?>> doAttendanceByLevelYear(GeneralMissingDTO missing);
 
-    List<GenericAttendanceMatcher<?>> doAttendanceByGroup(String teacherRef, GroupMissingDTO missing);
+    List<GenericAttendanceMatcher<?>> doAttendanceByGroup(GroupMissingDTO missing);
 
     List<AttendanceMatcher> addStudentsAttendances(
             List<String> presentSTDs,
