@@ -1,25 +1,23 @@
 package dev.razafindratelo.trackmyclass.dto;
 
-import dev.razafindratelo.trackmyclass.entity.users.enums.Group;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public final class GroupMissingDTO extends GeneralMissingDTO{
-    private final Group group;
+@Setter
+public sealed class GeneralAttendanceDTO extends GeneralMissingDTO permits GroupAttendanceDTO {
+    private List<StudentDelayDTO> studentDelays;
 
-    public GroupMissingDTO(
+    public GeneralAttendanceDTO(
             String courseName,
-            Group group,
             LocalDateTime commencement,
             LocalDateTime termination,
             List<String> stdsWithMissingJustification,
             List<String> stdsWithoutMissingJustification,
+            List<StudentDelayDTO> studentDelays,
             String responsibleRef
     ) {
         super(
@@ -30,6 +28,6 @@ public final class GroupMissingDTO extends GeneralMissingDTO{
                 stdsWithoutMissingJustification,
                 responsibleRef
         );
-        this.group = group;
+        this.studentDelays = studentDelays;
     }
 }

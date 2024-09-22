@@ -2,19 +2,20 @@ package dev.razafindratelo.trackmyclass.dto;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@Setter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public sealed class GeneralMissingDTO extends AbstractAttendanceDTO
-    permits GroupMissingDTO
+        permits GeneralAttendanceDTO
 {
-    private final List<String> stdsWithMissingJustification;
-    private final List<String> stdsWithoutMissingJustification;
+    private List<String> stdsWithMissingJustification;
+    private List<String> stdsWithoutMissingJustification;
     private final String responsibleRef;
 
     public GeneralMissingDTO(
