@@ -28,12 +28,8 @@ public class AttendanceController {
         return ResponseEntity.ok(attendanceService.findAttendancesByStudentRef(std));
     }
 
-    @PostMapping("/teacher/{teacherRef}/attendances/add")
-    public ResponseEntity<List<AttendanceMatcher>> addStudentsAttendance(
-            @PathVariable("teacherRef") String teacherRef,
-            @PathVariable("std") String std,
-            @RequestBody AttendanceDTO attendance
-    ) {
+    @PostMapping("/attendances/add")
+    public ResponseEntity<List<AttendanceMatcher>> addStudentsAttendance(@RequestBody AttendanceDTO attendance) {
         return new ResponseEntity<>(
                 attendanceService.addStudentsAttendance(attendance),
                 HttpStatus.CREATED
