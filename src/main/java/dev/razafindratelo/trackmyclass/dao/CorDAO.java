@@ -5,6 +5,7 @@ import dev.razafindratelo.trackmyclass.entity.cor.Cor;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
 import dev.razafindratelo.trackmyclass.exceptionHandler.InternalException;
 import dev.razafindratelo.trackmyclass.mapper.StudentMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@AllArgsConstructor
 public class CorDAO {
     private DBConnection dbConnection;
 
@@ -43,6 +45,44 @@ public class CorDAO {
 
         } catch (SQLException e) {
             throw new InternalException("Error while retrieving all CORs := " + e.getMessage());
+        }
+    }
+
+    public Cor addCor(Cor cor) {
+        try {
+            PreparedStatement insertion = dbConnection
+                    .getConnection()
+                    .prepareStatement(
+                            """
+                                     INSERT INTO cor (cor_ref, std_ref) VALUES (?,?)
+                                 """
+                    );
+            insertion.setString(1, cor.getCorRef());
+            insertion.setString(2, cor.getStudent().getUserRef());
+
+            insertion.execute();
+
+            return cor;
+
+        } catch (SQLException e) {
+            throw new InternalException("Error while adding COR := " + e.getMessage());
+        }
+    }
+
+
+    public Cor deleteCor (Cor cor) {
+        try {
+            PreparedStatement deletion = dbConnection
+                    .getConnection()
+                    .prepareStatement("DELETE FROM cor WHERE cor_ref = ?");
+            deletion.setString(1, cor.getCorRef());
+
+            deletion.execute();
+
+            return cor;
+
+        } catch (SQLException e) {
+            throw new InternalException("Error while deleting cor with id " + cor.getCorRef() + " := " + e.getMessage());
         }
     }
 }

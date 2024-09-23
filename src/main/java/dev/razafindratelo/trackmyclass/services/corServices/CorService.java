@@ -9,7 +9,17 @@ import java.util.List;
 public interface CorService {
     List<Cor> findAll();
 
-    Cor findById(String corRef);
+    String corRefGenerator();
+
+    Cor findCorByItsRef(String corRef);
 
     List<Cor> findByStudentRef(String studentRef);
+
+    Cor addCor(Cor cor);
+
+    List<Cor> addCors(List<Cor> cors);
+
+    Cor deleteCor(String corRef);
+
+    List<Cor> updateCorList();
 }
