@@ -729,6 +729,27 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Cor"
+
+  /COR/update:
+    put:
+      tags:
+        - COR
+      summary: update COR list
+      description: "This allows to update the COR's table in the Database. 
+        Seeing that every time we add/do attendance, a missing list will be added to the Missing's list. 
+        So we have to update our COR's table in order to see which student has more or equals to 
+        3 unjustified missing during the current month. So in order to have our COR list up to date, we have to pass through
+        this endpoint."
+      operationId: updateCor
+      responses:
+        201:
+           description: The list of the updated COR available in the database
+           content:
+             application/json:
+               schema:
+                 type: array
+                 items:
+                   $ref: "#/components/schemas/Cor"
   /COR/delete/{corRef}:
     delete:
       tags:

@@ -36,7 +36,7 @@ public class CorController {
     @PutMapping("/COR/update")
     public ResponseEntity<List<Cor>> updateCor() {
         corService.updateCorList();
-        return getAllCors();
+        return new ResponseEntity<>(corService.findAll(), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/COR/delete/{corRef}")
