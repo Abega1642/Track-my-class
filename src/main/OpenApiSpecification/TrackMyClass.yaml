@@ -508,7 +508,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorLog"=
+                $ref: "#/components/schemas/ErrorLog"
         '500':
           description: Error while retrieving all courses
           content:
