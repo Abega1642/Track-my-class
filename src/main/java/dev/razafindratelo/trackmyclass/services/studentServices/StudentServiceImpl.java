@@ -173,11 +173,13 @@ public class StudentServiceImpl implements StudentService {
         return studentDAO.integralUpdateStudent(std, studentToBeUpdated);
     }
 
-    @Override
-    public List<Student> updateLevels(List<LevelGroupMatcher> groupAndLevelRelations, List<String> STDs) {
+    public List<Student> completeUpgradeStudentsLevels(List<String> excludedStudent) {
+        List<LevelGroupMatcher> groupAndLevelRelations = groupAndLevelService.updateGroupAndLevelRelations();
+        System.out.println(groupAndLevelRelations);
+
         List<Student> students = findAllStudents()
                 .stream()
-                .filter(student -> !STDs.contains(student.getUserRef()))
+                .filter(student -> !excludedStudent.contains(student.getUserRef()))
                 .toList();
 
         for (Student student : students) {
@@ -187,9 +189,13 @@ public class StudentServiceImpl implements StudentService {
                     .filter(lvl -> lvl.getGroup().equals(group))
                     .toList()
                     .getFirst().getLevel();
+            System.out.println("Group : " + group + ", level : " + level);
+
             student.setLevel(level);
+            System.out.println(student);
             updateStudentIntegrally(student.getUserRef(), student);
         }
+
         return students;
     }
 }
