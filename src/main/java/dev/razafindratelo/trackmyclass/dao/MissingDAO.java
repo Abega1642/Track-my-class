@@ -1,6 +1,7 @@
 package dev.razafindratelo.trackmyclass.dao;
 
 import dev.razafindratelo.trackmyclass.dao.repository.DBConnection;
+import dev.razafindratelo.trackmyclass.dto.MissingDTO;
 import dev.razafindratelo.trackmyclass.entity.attendances.Missing;
 import dev.razafindratelo.trackmyclass.entity.course.Course;
 import dev.razafindratelo.trackmyclass.entity.matchers.MissingMatcher;
@@ -165,6 +166,80 @@ public class MissingDAO {
 
         } catch(SQLException e) {
             throw new InternalException("Error while adding missing: " + e.getMessage());
+        }
+    }
+
+    public Missing updateMissingDateAndJustification(
+            String std,
+            LocalDateTime commencement,
+            LocalDateTime termination,
+            Missing missing
+    ) {
+        try {
+            PreparedStatement update = dbConnection
+                    .getConnection()
+                    .prepareStatement("""
+                                               UPDATE has_missed SET
+                                                   commencement = ?,
+                                                   termination = ?,
+                                                   is_justified = ?
+                                               WHERE
+                                                   std_ref = ? AND
+                                                   crs_ref = ? AND
+                                                   tch_ref = ? AND
+                                                   commencement = ? AND
+                                                   termination = ?
+                                           """
+                    );
+            update.setTimestamp(1, Timestamp.valueOf(missing.getCommencement()));
+            update.setTimestamp(2, Timestamp.valueOf(missing.getTermination()));
+            update.setBoolean(3, missing.isJustified());
+
+            update.setString(4, std);
+            update.setString(5, missing.getCourse().getCourseRef());
+            update.setString(6, missing.getAttendanceResponsible().getUserRef());
+            update.setTimestamp(7, Timestamp.valueOf(commencement));
+            update.setTimestamp(8, Timestamp.valueOf(termination));
+
+            update.executeUpdate();
+
+            return missing;
+
+
+        } catch(SQLException e) {
+            throw new InternalException("Error while updating missing: " + e.getMessage());
+        }
+    }
+
+    public boolean deleteMissing(
+            MissingDTO missingDTO,
+            String courseName
+    ) {
+        try {
+            PreparedStatement deletion = dbConnection
+                    .getConnection()
+                    .prepareStatement(
+                            """
+                                 DELETE FROM has_missed WHERE 
+                                     std_ref = ? AND
+                                     tch_ref = ? AND
+                                     commencement = ? AND
+                                     termination = ? AND
+                                     crs_ref = ? AND
+                                 """
+                    );
+            deletion.setString(1, missingDTO.getStudentRef());
+            deletion.setString(2, missingDTO.getResponsibleRef());
+            deletion.setTimestamp(3, Timestamp.valueOf(missingDTO.getCommencement()));
+            deletion.setTimestamp(4, Timestamp.valueOf(missingDTO.getTermination()));
+            deletion.setString(5, courseName);
+
+            deletion.executeUpdate();
+
+            return true;
+
+        } catch (SQLException e) {
+            throw new InternalException("Error while deleting missing: " + e.getMessage());
         }
     }
 

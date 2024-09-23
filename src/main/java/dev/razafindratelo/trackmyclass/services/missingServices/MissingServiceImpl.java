@@ -2,11 +2,13 @@ package dev.razafindratelo.trackmyclass.services.missingServices;
 
 import dev.razafindratelo.trackmyclass.dao.MissingDAO;
 import dev.razafindratelo.trackmyclass.dto.GeneralMissingDTO;
+import dev.razafindratelo.trackmyclass.dto.MissingDTO;
 import dev.razafindratelo.trackmyclass.entity.attendances.Missing;
 import dev.razafindratelo.trackmyclass.entity.course.Course;
 import dev.razafindratelo.trackmyclass.entity.matchers.MissingMatcher;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
 import dev.razafindratelo.trackmyclass.entity.users.Teacher;
+import dev.razafindratelo.trackmyclass.exceptionHandler.IllegalRequestException;
 import dev.razafindratelo.trackmyclass.services.courseServices.CourseService;
 import dev.razafindratelo.trackmyclass.services.studentServices.StudentService;
 import dev.razafindratelo.trackmyclass.services.teacherServices.TeacherService;
@@ -98,6 +100,66 @@ public class MissingServiceImpl implements MissingService {
         missingMatchers.addAll(addMissing(generalMissingDTO.getStdsWithoutMissingJustification(), generalMissingDTO, false));
 
         return missingMatchers;
+    }
+
+    @Override
+    public MissingMatcher updateMissing(
+            String courseName,
+            LocalDateTime commencement,
+            LocalDateTime termination,
+            MissingDTO missingDTO
+    ) {
+        if(missingDTO == null)
+            throw new IllegalRequestException("Request body for updating missing must not be null");
+
+
+        if(missingDTO.getCommencement() == null || missingDTO.getTermination() == null
+                || missingDTO.getResponsibleRef() == null || missingDTO.getStudentRef() == null
+        )
+            throw new IllegalRequestException("The body attributes must not be null");
+
+
+        Teacher responsible = teacherService.findTeacherById(missingDTO.getResponsibleRef());
+        Course course = courseService.getCourseByName(courseName);
+        Student student = studentService.findStudentById(missingDTO.getStudentRef());
+
+        Missing missing = new Missing(
+                missingDTO.getCommencement(),
+                missingDTO.getTermination(),
+                responsible,
+                course,
+                missingDTO.isJustified()
+        );
+        Missing updatedMissing = missingDAO.updateMissingDateAndJustification(
+                missingDTO.getStudentRef(),
+                commencement,
+                termination,
+                missing
+        );
+
+        return new MissingMatcher(student, List.of(updatedMissing));
+    }
+
+    @Override
+    public Missing deleteMissing(String courseName, String studentRef, LocalDateTime commencement, LocalDateTime termination, String responsibleRef) {
+        if(courseName ==null || studentRef == null || commencement == null || termination == null)
+            throw new IllegalRequestException("Parameters must not be null");
+        Course course = courseService.getCourseByName(courseName);
+        Student student = studentService.findStudentById(studentRef);
+        Teacher responsible = teacherService.findTeacherById(responsibleRef);
+        Missing msg = missingDAO.getMissingByStudent(student).getAttendances().stream().filter(
+                ms -> ms.getCourse().equals(course) && ms.getCommencement().equals(commencement)
+                && ms.getTermination().equals(termination))
+                .findFirst().orElse(null);
+
+        if(msg == null)
+            return new Missing(LocalDateTime.now(), LocalDateTime.now(), responsible, course);
+
+        MissingDTO missing = new MissingDTO(studentRef, responsibleRef, commencement, termination, msg.isJustified());
+
+        if(missingDAO.deleteMissing(missing, courseName))
+            return msg;
+        return null;
     }
 
     @Override
