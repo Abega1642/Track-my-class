@@ -99,8 +99,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course updateCourse(String courseName, Course course) {
 
-        Course courseToUpdate = getAllCourses()
-                .stream().filter(crs -> crs.getCourseRef().equalsIgnoreCase(courseName)).toList().getFirst();
+        Course courseToUpdate = getCourseByName(courseName);
 
         if (courseToUpdate == null)
             throw new IllegalRequestException("Course " + courseName + " not found");
@@ -108,7 +107,9 @@ public class CourseServiceImpl implements CourseService {
         if (course.getName() == null || course.getName().isEmpty())
             throw new IllegalRequestException("Course name cannot be null or empty");
 
-        return courseDAO.updateCourse(courseToUpdate.getCourseRef(), course);
+        Course updatedCourse = courseDAO.updateCourse(courseToUpdate.getCourseRef(), course);
+        updatedCourse.setCourseRef(courseToUpdate.getCourseRef());
+        return updatedCourse;
     }
 
     @Override

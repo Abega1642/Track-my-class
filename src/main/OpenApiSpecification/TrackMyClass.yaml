@@ -255,6 +255,117 @@ paths:
               schema:
                 $ref: "#/components/schemas/Teacher"
 
+  /courses:
+    get:
+      tags:
+        - Course
+      summary: get all available courses
+      operationId: getAllCourses
+      responses:
+        200:
+          description: list of all available courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Course"
+  /course:
+    get:
+      tags:
+        - Course
+      summary: get all course by course name
+      description: give back the course by providing the course name as a query parameter
+      operationId: getCourseByCourseName
+      parameters:
+        - $ref: "#/components/parameters/course_name"
+      responses:
+        200:
+          description: the course which corresponding to the course name
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Course"
+  /course/add:
+    post:
+      tags:
+        - Course
+      summary: add a new course
+      description: "allows to add a new course by just providing 
+      whether (courseRef, name, credit) or just (name, credit) or simply (name)"
+      operationId: addCourse
+      parameters:
+        - $ref: "#/components/parameters/level_year"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Course"
+      responses:
+        201:
+          description: the new course has been added successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Course"
+
+  /course/update/{courseName}:
+    put:
+      tags:
+        - Course
+      summary: update course
+      description: Allows to update a course (replace it by the new course provided in request body)
+      operationId: updateCourse
+      parameters:
+        - $ref: "#/components/parameters/courseName"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Course"
+      responses:
+        200:
+          description: the course has been updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Course"
+
+    patch:
+      tags:
+        - Course
+      summary: update course partially
+      description: allows to update some of the course attributes (partial update of course)
+      operationId: updateCoursePartially
+      parameters:
+        - $ref: "#/components/parameters/courseName"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Course"
+      responses:
+        200:
+          description: the course has been updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Course"
+
+  /course/delete/{courseName}:
+    delete:
+      tags:
+        - Course
+      summary: delete a course by its name
+      description: "allows the deletion of a course by its name 
+      NB: a course can be deleted if only if it is no more used in other relations"
+      parameters:
+        - $ref: "#/components/parameters/courseName"
+      responses:
+        200:
+          description: the course has been successfully deleted
+
   /student/attendances:
     get:
       tags:
@@ -270,6 +381,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Attendance"
+
   /student/{std}/attendances:
     get:
       tags:
@@ -338,7 +450,6 @@ paths:
                   oneOf:
                     - $ref: "#/components/schemas/AttendanceMatcher"
                     - $ref: "#/components/schemas/MissingMatcher"
-
   /attendances/add/group:
     post:
       tags:
@@ -417,6 +528,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/MissingMatcher"
+
   /student/{std}/missing:
     get:
       tags:
@@ -434,7 +546,6 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 $ref: "#/components/schemas/MissingMatcher"
 
   /missing/add/student:
@@ -474,7 +585,9 @@ paths:
                 type: array
                 items:
                   type: object
-                  $ref: "#/components/schemas/DelayMatcher"
+                  items:
+                    $ref: "#/components/schemas/DelayMatcher"
+
   /student/{std}/delays:
     get:
       tags:
@@ -596,6 +709,23 @@ components:
       schema:
         type: string
         example: "PROG2"
+
+    level_year:
+      in: query
+      name: level_year
+      required: true
+      schema:
+        type: string
+        allOf:
+          - $ref: "#/components/schemas/level"
+    courseName:
+      in: path
+      name: courseName
+      required: true
+      schema:
+        allOf:
+          - $ref: "#/components/parameters/course_name"
+
   schemas:
     User:
       type: object
@@ -627,6 +757,8 @@ components:
         - "L1"
         - "L2"
         - "L3"
+        - "M1"
+        - "M2"
     group:
       type: string
       enum:
@@ -670,13 +802,16 @@ components:
           type: string
           example: "L1-001"
           description: This is the id of the course apart from its name
+          nullable: true
         name:
           type: string
           example: "PROG2"
+          nullable: true
         credit:
           type: integer
           format: int32
           example: 6
+          nullable: true
 
     Attendance:
       type: object
@@ -841,3 +976,4 @@ components:
       allOf:
         - $ref: "#/components/schemas/level"
         - $ref: "#/components/schemas/group"
+
