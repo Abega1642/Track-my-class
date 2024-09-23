@@ -20,6 +20,25 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Student"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while retrieving students
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+
   /student/{std}:
     get:
       tags:
@@ -35,6 +54,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Student"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while retrieving student
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /student/add:
     post:
@@ -59,6 +96,30 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Student"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '409':
+          description: Resource Duplicated (Student with this id already exists)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while adding student
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /student/upgrade:
     put:
@@ -85,6 +146,18 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Student"
+        '400':
+          description: Bad request (Check the endpoint or make sure you enter a list of the STDs).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while upgrading students
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /student/{std}/update:
     put:
@@ -92,6 +165,7 @@ paths:
         - Student
       summary: update a student integrally
       operationId: updateStudentIntegrally
+      description: allows to up
       parameters:
         - $ref: "#/components/parameters/std"
       requestBody:
@@ -107,6 +181,24 @@ paths:
             application/json:
               schema:
                 type: object
+        '400':
+          description: Bad request (Student attributes must not be null expect first name and student ref)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found (This student does not exists in the database)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while updating student
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
     patch:
       tags:
@@ -128,6 +220,24 @@ paths:
             application/json:
               schema:
                 type: object
+        '400':
+          description: Bad request (Check the request body make sure you enter the right attributes name)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found (student with this id does not exist in the database)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while updating student partially
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /student/delete/{std}:
     delete:
@@ -144,6 +254,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Student"
+        '400':
+          description: Bad request (Check the endpoint)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found (Student with this id does not exist)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while deleting student
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /teachers:
     get:
@@ -160,6 +288,18 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Teacher"
+        '400':
+          description: Bad request (Check your endpoint)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while retrieving teachers
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /teacher/{teacherRef}:
     get:
@@ -176,6 +316,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Teacher"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found (Teacher with this reference does not exist in the database)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while retrieving teacher informations
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+
   /teacher/add:
     post:
       tags:
@@ -198,6 +357,24 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Teacher"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '409':
+          description: Resource Duplicated (Teacher with this id already exists)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while adding teacher
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /teacher/{teacherRef}/update:
     put:
@@ -219,6 +396,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Teacher"
+        '400':
+          description: Bad request (Check the endpoint)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found (Teacher with this reference does not exists in the database)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while updating teacher
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
     patch:
       tags:
@@ -239,6 +434,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Teacher"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found (Teacher with this reference does not exist in the database)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while updating teacher partially
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /teacher/delete/{teacherRef}:
     delete:
@@ -255,6 +468,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Teacher"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found (Teacher with this reference does not exist in the database)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while deleting teacher
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /courses:
     get:
@@ -262,6 +493,7 @@ paths:
         - Course
       summary: get all available courses
       operationId: getAllCourses
+      description: this returns a list of all courses available
       responses:
         200:
           description: list of all available courses
@@ -271,6 +503,19 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Course"
+        '400':
+          description: Bad request (check the endpoint)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"=
+        '500':
+          description: Error while retrieving all courses
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+
   /course:
     get:
       tags:
@@ -286,8 +531,26 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 $ref: "#/components/schemas/Course"
+        '400':
+          description: Bad request (check your endpoint)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found (No course matches with that name)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while searching course with that given name
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+
   /course/add:
     post:
       tags:
@@ -310,6 +573,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Course"
+        '400':
+          description: Bad request (Check your endpoint or your request body {attributes must not be null except course reference})
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '409':
+          description: Resource Duplicated (Course with this name or name already exists)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while adding course
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /course/update/{courseName}:
     put:
@@ -332,6 +613,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Course"
+        '400':
+          description: Bad request (Check your endpoint or your request body {attributes must not be null except course ref})
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found (Course with this name does not exist in the database)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while updating course
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
     patch:
       tags:
@@ -353,6 +652,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Course"
+        '400':
+          description: Bad request (check your endpoint or your body request)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found (Course with this name does not exist)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while updating course partially
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /course/delete/{courseName}:
     delete:
@@ -366,6 +683,28 @@ paths:
       responses:
         200:
           description: the course has been successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Course"
+        '400':
+          description: Bad request (Check your endpoint)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found (Course with this name does not exist)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while deleting course
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /student/attendances:
     get:
@@ -382,6 +721,18 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Attendance"
+        '400':
+          description: Bad request (Check your endpoint)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while retrieving all attendances
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /student/{std}/attendances:
     get:
@@ -397,8 +748,26 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 $ref: "#/components/schemas/AttendanceMatcher"
+        '400':
+          description: Bad request (Please check your endpoint)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found (Student with this id does not exist)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while retrieving attendance by student
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+
 
   /attendances/add/student:
     post:
@@ -413,7 +782,6 @@ paths:
         content:
           application/json:
             schema:
-              type: object
               $ref: "#/components/schemas/Attendances"
       responses:
         201:
@@ -424,6 +792,18 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/AttendanceMatcher"
+        '400':
+          description: Bad request (CHeck your endpoint)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while adding student attendance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /attendances/add/level:
     post:
@@ -438,7 +818,6 @@ paths:
         content:
           application/json:
             schema:
-              type: object
               $ref: "#/components/schemas/GeneralAttendance"
       responses:
         201:
@@ -451,6 +830,19 @@ paths:
                   oneOf:
                     - $ref: "#/components/schemas/AttendanceMatcher"
                     - $ref: "#/components/schemas/MissingMatcher"
+        '400':
+          description: Bad request (Check your endpoint)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while doing attendance by level
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+
   /attendances/add/group:
     post:
       tags:
@@ -463,7 +855,6 @@ paths:
         content:
           application/json:
             schema:
-              type: object
               $ref: "#/components/schemas/GroupAttendance"
       responses:
         201:
@@ -477,6 +868,18 @@ paths:
                     - $ref: "#/components/schemas/AttendanceMatcher"
                     - $ref: "#/components/schemas/MissingMatcher"
                     - $ref: "#/components/schemas/DelayMatcher"
+        '400':
+          description: Bad request (check your endpoint)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while doing student by group
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /student/missing:
     get:
@@ -493,6 +896,24 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/MissingMatcher"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found (check your endpoint)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while retrieving missing list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /student/{std}/missing/course:
     get:
@@ -529,6 +950,24 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/MissingMatcher"
+        '400':
+          description: Bad request (check your endpoint)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found (Student with this id doesn't exist)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while retrieving student missing list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /student/{std}/missing:
     get:
@@ -548,6 +987,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MissingMatcher"
+        '400':
+          description: Bad request (check your endoint)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found (Student with this id doesn't exist)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while retrieving student missing list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /missing/add/student:
     post:
@@ -560,7 +1017,6 @@ paths:
         content:
           application/json:
             schema:
-              type: object
               $ref: "#/components/schemas/GeneralMissings"
       responses:
         201:
@@ -653,7 +1109,6 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 $ref: "#/components/schemas/DelayMatcher"
 
   /delay/add/student:
@@ -667,7 +1122,6 @@ paths:
         content:
           application/json:
             schema:
-              type: object
               $ref: "#/components/schemas/Delays"
       responses:
         201:
@@ -694,6 +1148,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/LevelGroupMatcher"
+
   /groups:
     get:
       tags:
@@ -779,6 +1234,24 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Cor"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '409':
+          description: Resource Duplicated (COR with this id already exists)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while adding COR
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
 
   /COR/update:
     put:
@@ -800,6 +1273,25 @@ paths:
                  type: array
                  items:
                    $ref: "#/components/schemas/Cor"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found (Check your endpoint)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while updating COR
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+
   /COR/delete/{corRef}:
     delete:
       tags:
@@ -815,6 +1307,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Cor"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '404':
+          description: Resource not found (COR with this id doesn't exist)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+        '500':
+          description: Error while deleting student
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorLog"
+
 
 
 
@@ -899,6 +1410,22 @@ components:
         example: "COR23001"
 
   schemas:
+    ErrorLog:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: CONFLICT
+        stackTrace:
+          type: string
+          example: Resource Duplicated
+        type:
+          type: string
+          enum: ["CLIENT_EXCEPTION", "SERVER_EXCEPTION"]
+
     User:
       type: object
       properties:

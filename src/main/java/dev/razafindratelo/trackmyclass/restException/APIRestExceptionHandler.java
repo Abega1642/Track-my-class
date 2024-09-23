@@ -15,7 +15,7 @@ public class APIRestExceptionHandler {
     public ResponseEntity<?> handleBadRequestException(IllegalRequestException e, WebRequest request) {
         log.error("Bad request : {}", e.getMessage());
         ErrorLog err = new ErrorLog(
-                HttpStatus.NOT_ACCEPTABLE.value(),
+                HttpStatus.BAD_REQUEST.value(),
                 e.getMessage(), request.getDescription(false),
                 ExceptionHandlerType.CLIENT_EXCEPTION
         );
