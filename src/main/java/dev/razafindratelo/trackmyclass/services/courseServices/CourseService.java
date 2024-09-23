@@ -4,11 +4,25 @@ import dev.razafindratelo.trackmyclass.entity.course.Course;
 import dev.razafindratelo.trackmyclass.entity.users.enums.Level;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface CourseService {
-    Course getCourseById(String courseId);
+
+    List<Course> getAllCourses();
 
     Course getCourseByName(String name);
 
     Level getCourseLevelYear(String courseName);
+
+    String courseRefGenerator(String level);
+
+    Course addCourse(Course course, String correspondingLevel);
+
+    Course updateCourse(String courseName, Course course);
+
+    Course updateCoursePartially(String courseName, Course course) throws NoSuchFieldException, IllegalAccessException;
+
+
+    Course deleteCourse(String courseName);
 }

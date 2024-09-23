@@ -2,23 +2,26 @@ package dev.razafindratelo.trackmyclass.services.courseServices;
 
 import dev.razafindratelo.trackmyclass.dao.CourseDAO;
 import dev.razafindratelo.trackmyclass.entity.course.Course;
+import dev.razafindratelo.trackmyclass.entity.mergers.CourseMerger;
 import dev.razafindratelo.trackmyclass.entity.users.enums.Level;
 import dev.razafindratelo.trackmyclass.exceptionHandler.IllegalRequestException;
+import dev.razafindratelo.trackmyclass.exceptionHandler.ResourceDuplicatedException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class CourseServiceImpl implements CourseService {
     private final CourseDAO courseDAO;
+    private final CourseMerger courseMerger;
+
 
     @Override
-    public Course getCourseById(String courseId) {
-        if(courseId == null || courseId.isEmpty()) {
-            throw new IllegalRequestException("Course ID cannot be null or empty");
-        } else {
-            return courseDAO.getCourseByRef(courseId);
-        }
+    public List<Course> getAllCourses() {
+        return courseDAO.getAllCourses();
     }
 
     @Override
@@ -41,4 +44,84 @@ public class CourseServiceImpl implements CourseService {
         }
         return Level.valueOf(course.getCourseRef().substring(0,2));
     }
+
+    @Override
+    public String courseRefGenerator(String level) {
+        LocalDateTime now = LocalDateTime.now();
+        String year = String.valueOf(now.getYear()).substring(2);
+
+        if (getAllCourses().isEmpty()) {
+            return "CRS"+year+"001";
+        } else {
+            String upperCasedLevel = level.toUpperCase();
+
+            String corRefs = getAllCourses()
+                    .stream()
+                    .filter(crs -> getCourseLevelYear(crs.getName()).equals(Level.valueOf(upperCasedLevel)))
+                    .map(Course::getCourseRef)
+                    .sorted()
+                    .toList()
+                    .getLast();
+
+            int number = Integer.parseInt(corRefs.substring(3, 8)) + 1;
+
+            return corRefs.substring(0, 3) + number;
+        }
+    }
+
+    @Override
+    public Course addCourse(Course course, String correspondingLevel) {
+        if(course == null)
+            throw new IllegalRequestException("Course cannot be null");
+
+        if (getCourseByName(course.getName()) != null)
+            throw new ResourceDuplicatedException("Course already exists (similar name)");
+
+        if (course.getName() == null || course.getName().isEmpty())
+            throw new IllegalRequestException("Course name cannot be null or empty");
+
+
+        if (course.getCourseRef() == null || course.getCourseRef().length() != 8
+            || course.getCourseRef().substring(0, 3).equalsIgnoreCase(correspondingLevel + "-"))
+            course.setCourseRef(courseRefGenerator(correspondingLevel));
+
+        if (course.getCredit() < 0 )
+            course.setCredit(0);
+
+        return courseDAO.addCourse(course);
+
+    }
+
+    @Override
+    public Course updateCourse(String courseName, Course course) {
+
+        Course courseToUpdate = getAllCourses()
+                .stream().filter(crs -> crs.getCourseRef().equalsIgnoreCase(courseName)).toList().getFirst();
+
+        if (courseToUpdate == null)
+            throw new IllegalRequestException("Course " + courseName + " not found");
+
+        if (course.getName() == null || course.getName().isEmpty())
+            throw new IllegalRequestException("Course name cannot be null or empty");
+
+        return courseDAO.updateCourse(courseToUpdate.getCourseRef(), course);
+    }
+
+    @Override
+    public Course updateCoursePartially(String courseName, Course course) throws NoSuchFieldException, IllegalAccessException {
+        Course courseToUpdate = getAllCourses()
+                .stream().filter(crs -> crs.getCourseRef().equalsIgnoreCase(courseName)).toList().getFirst();
+        if (courseToUpdate == null)
+            throw new IllegalRequestException("Course " + courseName + " not found");
+
+        courseMerger.mergeFields(course, courseToUpdate);
+        return courseDAO.updateCourse(courseToUpdate.getCourseRef(), courseToUpdate);
+    }
+
+    @Override
+    public Course deleteCourse(String courseName) {
+        Course courseToDelete = getCourseByName(courseName);
+        return courseDAO.deleteCourse(courseToDelete);
+    }
+
 }
