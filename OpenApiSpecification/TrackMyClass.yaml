@@ -1695,6 +1695,9 @@ components:
         std:
           type: string
           example: "STD23007"
+        corDate:
+          type: string
+          format: date-time
     MissingDTO:
       properties:
         studentRef:
