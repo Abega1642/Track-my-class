@@ -48,16 +48,19 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              $ref: "#/components/schemas/Student"
+              type: array
+              items:
+                $ref: "#/components/schemas/Student"
       responses:
         201:
           description: student created successfully in the database
           content:
             application/json:
               schema:
-                type: object
-                $ref: "#/components/schemas/Student"
+                type: array
+                items:
+                  $ref: "#/components/schemas/Student"
+
   /student/upgrade:
     put:
       tags:
@@ -187,17 +190,19 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              $ref: "#/components/schemas/Teacher"
+              type: array
+              items:
+                $ref: "#/components/schemas/Teacher"
       responses:
         201:
           description: the added teacher
           content:
             application/json:
               schema:
-                type: object
-                $ref: "#/components/schemas/Teacher"
-
+                type: array
+                items:
+                  $ref: "#/components/schemas/Teacher"
+exi
   /teacher/{teacherRef}/update:
     put:
       tags:
