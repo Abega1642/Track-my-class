@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @ToString
@@ -12,4 +14,5 @@ import lombok.ToString;
 public class CorDTO {
     private String corRef;
     private String std;
+    private LocalDateTime corDate;
 }

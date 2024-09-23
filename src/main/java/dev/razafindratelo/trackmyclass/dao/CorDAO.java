@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,9 +38,10 @@ public class CorDAO {
             while (resultSet.next()) {
 
                 String corRef = resultSet.getString("cor_ref");
+                LocalDateTime corDate = resultSet.getTimestamp("cor_date").toLocalDateTime();
                 Student student = StudentMapper.mapToStudent(resultSet);
 
-                cors.add(new Cor(corRef, student));
+                cors.add(new Cor(corRef, student, corDate));
             }
 
             return cors;
@@ -54,14 +57,15 @@ public class CorDAO {
                     .getConnection()
                     .prepareStatement(
                             """
-                                     INSERT INTO cor (cor_ref, std_ref) VALUES (?,?)
+                                     INSERT INTO cor (cor_ref, std_ref, cor_date) VALUES (?,?,?)
                                  """
                     );
             insertion.setString(1, cor.getCorRef());
             insertion.setString(2, cor.getStudent().getUserRef());
+            insertion.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
 
             insertion.execute();
-
+            cor.setCorDate(LocalDateTime.now());
             return cor;
 
         } catch (SQLException e) {

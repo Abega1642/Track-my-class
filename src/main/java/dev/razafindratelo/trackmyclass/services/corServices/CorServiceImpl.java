@@ -104,8 +104,8 @@ public class CorServiceImpl implements CorService {
         List<Cor> result = new ArrayList<>();
         for(CorDTO cor: cors) {
             Student student = studentService.findStudentById(cor.getStd());
-            Cor cr = new Cor(corRefGenerator(), student);
-            System.out.println(cr);
+            Cor cr = new Cor(corRefGenerator(), student, LocalDateTime.now());
+
             Cor addedCor = corDAO.addCor(cr);
             result.add(addedCor);
         }
@@ -117,7 +117,7 @@ public class CorServiceImpl implements CorService {
         Cor cor = findCorByItsRef(corRef);
 
         if(cor == null)
-            return new Cor(corRef, null);
+            return new Cor(corRef, null, null);
 
         return corDAO.deleteCor(cor);
     }
@@ -149,7 +149,7 @@ public class CorServiceImpl implements CorService {
         List<CorDTO> cors = new ArrayList<>();
 
         for(String std: STDsRelatedToCOR) {
-            cors.add(new CorDTO(null, std));
+            cors.add(new CorDTO(null, std, LocalDateTime.now()));
         }
         return addCors(cors);
     }

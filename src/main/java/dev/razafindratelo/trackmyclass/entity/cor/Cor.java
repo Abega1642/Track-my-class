@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @ToString
@@ -15,4 +15,5 @@ import java.io.Serializable;
 public class Cor implements Serializable {
     private String corRef;
     private Student student;
+    private LocalDateTime corDate;
 }
