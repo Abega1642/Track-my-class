@@ -572,6 +572,56 @@ paths:
                 items:
                   $ref: "#/components/schemas/MissingMatcher"
 
+  /student/{std}/missing/update:
+    put:
+      tags:
+        - Missing
+      summary: update a missing
+      operationId: updateStudentMissingByStudent
+      description : allows to update essentially commencement, termination, and justification qualification of the student missing
+      parameters:
+        - $ref: "#/components/parameters/std"
+        - $ref: "#/components/parameters/course_name"
+        - $ref: "#/components/parameters/course_started_at"
+        - $ref: "#/components/parameters/course_ended_at"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MissingDTO"
+      responses:
+        200:
+          description: this is the updated missing of the student
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingMatcher"
+
+  /student/{std}/missing/delete:
+    delete:
+      tags:
+        - Missing
+      summary: delete a student missing
+      operationId: deleteMissing
+      description: "this allows to delete a student missing by providing 
+      the student ref, course name, the localDateTime of
+      the commencement and the termination of the course during the missing day"
+      parameters:
+        - $ref: "#/components/parameters/std"
+        - $ref: "#/components/parameters/course_name"
+        - $ref: "#/components/parameters/course_started_at"
+        - $ref: "#/components/parameters/course_ended_at"
+        - $ref: "#/components/parameters/responsibleRef"
+
+      responses:
+        200:
+          description: this is the deleted missing corresponding to provided params
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Missing"
+
+
   /student/delays:
     get:
       tags:
@@ -802,6 +852,28 @@ components:
       schema:
         type: string
         example: "PROG2"
+    course_started_at:
+      in: query
+      name: course_started_at
+      required: true
+      schema:
+        type: string
+        format: date-time
+    course_ended_at:
+      in: query
+      name: course_ended_at
+      required: true
+      schema:
+        type: string
+        format: date-time
+    responsibleRef:
+      in: query
+      name: responsibleRef
+      required: true
+      schema:
+        type: string
+        example: "TCH22005"
+
 
     level_year:
       in: query
@@ -1095,3 +1167,19 @@ components:
         std:
           type: string
           example: "STD23007"
+    MissingDTO:
+      properties:
+        studentRef:
+          type: string
+          example: "STD23028"
+        responsibleRef:
+          type: string
+          example: "TCH21002"
+        commencement:
+          type: string
+          format: date-time
+        termination:
+          type: string
+          format: date-time
+        isJustified:
+          type: boolean
