@@ -48,24 +48,28 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public String courseRefGenerator(String level) {
         LocalDateTime now = LocalDateTime.now();
-        String year = String.valueOf(now.getYear()).substring(2);
 
         if (getAllCourses().isEmpty()) {
-            return "CRS"+year+"001";
+            return level.toUpperCase()+"-001";
         } else {
             String upperCasedLevel = level.toUpperCase();
 
-            String corRefs = getAllCourses()
+            List<String> courseRefs = getAllCourses()
                     .stream()
                     .filter(crs -> getCourseLevelYear(crs.getName()).equals(Level.valueOf(upperCasedLevel)))
                     .map(Course::getCourseRef)
                     .sorted()
-                    .toList()
-                    .getLast();
+                    .toList();
 
-            int number = Integer.parseInt(corRefs.substring(3, 8)) + 1;
+            if(courseRefs.isEmpty()) {
+                return level.toUpperCase()+"-001";
+            } else {
+                String courseRef = courseRefs.getLast();
+                int number = Integer.parseInt(courseRef.substring(3, 6)) + 1;
 
-            return corRefs.substring(0, 3) + number;
+                return (number < 10) ? courseRef.substring(0, 3) +"00"+ number : courseRef.substring(0, 3) +"0"+ number;
+            }
+
         }
     }
 
