@@ -675,6 +675,78 @@ paths:
                 items:
                   $ref: "#/components/schemas/level"
 
+  /CORs:
+    get:
+      tags:
+        - COR
+      summary: get all existing CORs
+      responses:
+        200:
+          description: list of all existing CORs in the database
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cor"
+
+  /COR/student/{std}:
+    get:
+      tags:
+        - COR
+      summary: get all CORs by student reference
+      description: allows to get of all CORs corresponding to the student with provided STD
+      parameters:
+        - $ref: "#/components/parameters/std"
+      responses:
+        200:
+          description: list of all CORs corresponding to the STD
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cor"
+  /COR/add:
+    post:
+      tags:
+        - COR
+      summary: add a student COR
+      description: allows to add student COR
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/CorDTO"
+      responses:
+        201:
+          description: the created student (created with success)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cor"
+  /COR/delete/{corRef}:
+    delete:
+      tags:
+        - COR
+      summary: delete student COR by its reference
+      operationId: deleteCorByCorRef
+      parameters:
+        - $ref: "#/components/parameters/corRef"
+      responses:
+        200:
+          description: the created student (created with success)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cor"
+
+
+
 components:
   parameters:
     std:
@@ -725,6 +797,13 @@ components:
       schema:
         allOf:
           - $ref: "#/components/parameters/course_name"
+    corRef:
+      in: path
+      required: true
+      name: corRef
+      schema:
+        type: string
+        example: "COR23001"
 
   schemas:
     User:
@@ -977,3 +1056,21 @@ components:
         - $ref: "#/components/schemas/level"
         - $ref: "#/components/schemas/group"
 
+    CorDTO:
+      type: object
+      properties:
+        corRef:
+          type: string
+          example: "COR23001"
+        std:
+          type: string
+          example: "STD23007"
+    Cor:
+      type: object
+      properties:
+        corRef:
+          type: string
+          example: "COR23001"
+        std:
+          type: string
+          example: "STD23007"

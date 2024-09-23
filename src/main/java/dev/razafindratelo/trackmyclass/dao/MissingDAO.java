@@ -93,7 +93,6 @@ public class MissingDAO {
         List<Missing> missing = missingMatcher.getAttendances()
                 .stream().filter(mis -> !mis.isJustified())
                 .toList();
-        missing.forEach(System.out::println);
         missingMatcher.setAttendances(missing);
         return missingMatcher;
     }
@@ -103,7 +102,6 @@ public class MissingDAO {
         List<Missing> missing = missingMatcher.getAttendances()
                 .stream().filter(Missing::isJustified)
                 .toList();
-        missing.forEach(System.out::println);
         missingMatcher.setAttendances(missing);
         return missingMatcher;
     }
