@@ -2,10 +2,8 @@ package dev.razafindratelo.trackmyclass.services.groupAndLevelServices;
 
 import dev.razafindratelo.trackmyclass.dao.GroupAndLevelDAO;
 import dev.razafindratelo.trackmyclass.entity.matchers.LevelGroupMatcher;
-import dev.razafindratelo.trackmyclass.entity.users.Student;
 import dev.razafindratelo.trackmyclass.entity.users.enums.Group;
 import dev.razafindratelo.trackmyclass.entity.users.enums.Level;
-import dev.razafindratelo.trackmyclass.services.studentServices.StudentService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Service;
@@ -17,8 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 public class GroupAndLevelServiceImpl implements GroupAndLevelService {
     private final GroupAndLevelDAO groupAndLevelDAO;
-    private final StudentService studentService;
-
 
     @Override
     public List<LevelGroupMatcher> getAllLevelAndGroupRelations() {
@@ -41,15 +37,8 @@ public class GroupAndLevelServiceImpl implements GroupAndLevelService {
     }
 
     @Override
-    public List<LevelGroupMatcher> updateGroupAndLevelRelation() {
+    public List<LevelGroupMatcher> updateGroupAndLevelRelations() {
         return groupAndLevelDAO.updateGroupLevels();
     }
-
-    @Override
-    public List<Student> updateAllLevelGroupRelationAndStudentToNextLevelYear(List<String> excludeSTDs) {
-        List<LevelGroupMatcher> updatedGroupAndLevelRelations = updateGroupAndLevelRelation();
-        return studentService.updateLevels(updatedGroupAndLevelRelations, excludeSTDs);
-    }
-
 
 }
