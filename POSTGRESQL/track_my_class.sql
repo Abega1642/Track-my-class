@@ -28,6 +28,7 @@ CREATE TABLE Course(
 CREATE TABLE COR(
         cor_ref VARCHAR (8) NOT NULL PRIMARY KEY,
         std_ref VARCHAR (8) NOT NULL,
+        "cor_date" TIMESTAMP NOT NULL,
 	FOREIGN KEY (std_ref) REFERENCES Student(std_ref)
 );
 
