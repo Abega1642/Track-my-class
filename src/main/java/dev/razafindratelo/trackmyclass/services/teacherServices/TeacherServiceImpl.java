@@ -49,13 +49,14 @@ public class TeacherServiceImpl implements TeacherService {
         String year = String.valueOf(now.getYear()).substring(2);
 
         if (findAllTeachersRef().isEmpty()) {
-            return "COR"+year+"001";
+            return "TCH"+year+"001";
         }
         String corRefs = findAllTeachersRef()
                 .stream()
                 .sorted()
                 .toList()
                 .getLast();
+
         int number = Integer.parseInt(corRefs.substring(3, 8)) + 1;
 
         if (!corRefs.substring(3, 5).equals(year)) {
