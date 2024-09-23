@@ -11,6 +11,7 @@ import dev.razafindratelo.trackmyclass.exceptionHandler.ResourceNotFoundExceptio
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,19 +44,44 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Teacher addTeacher(Teacher teacher) {
-        if(teacher == null) {
-            throw new IllegalRequestException("Teacher must not be null");
-        } else if (findAllTeachersRef().contains(teacher.getUserRef())) {
-            throw new ResourceDuplicatedException("Teacher with id :" + teacher.getUserRef() + " already exists");
-        } else if (
-                teacher.getUserRef() == null
-                || teacher.getEmail() == null
-                || teacher.getLastName() == null
-                || teacher.getPhoneNumber() == null
-        ) {
-            throw new IllegalRequestException("Teachers attributes must not be null except the firstname");
+    public String teacherRefGenerator() {
+        LocalDateTime now = LocalDateTime.now();
+        String year = String.valueOf(now.getYear()).substring(2);
+
+        if (findAllTeachersRef().isEmpty()) {
+            return "COR"+year+"001";
         }
+        String corRefs = findAllTeachersRef()
+                .stream()
+                .sorted()
+                .toList()
+                .getLast();
+        int number = Integer.parseInt(corRefs.substring(3, 8)) + 1;
+
+        if (!corRefs.substring(3, 5).equals(year)) {
+            return "TCH"+year+"001";
+        }
+
+        return corRefs.substring(0, 3) + number;
+    }
+
+    @Override
+    public Teacher addTeacher(Teacher teacher) {
+        if(teacher == null)
+            throw new IllegalRequestException("Teacher must not be null");
+
+        if (findAllTeachersRef().contains(teacher.getUserRef()))
+            throw new ResourceDuplicatedException("Teacher with id :" + teacher.getUserRef() + " already exists");
+
+        if (teacher.getEmail() == null || teacher.getLastName() == null || teacher.getPhoneNumber() == null)
+            throw new IllegalRequestException("Teachers attributes must not be null except the firstname");
+
+        if (teacher.getUserRef() == null || teacher.getUserRef().length() != 8
+                || !teacher.getUserRef().substring(0,3).equalsIgnoreCase("TCH")) {
+
+            teacher.setUserRef(teacherRefGenerator());
+        }
+
         teacher.setUserRef(teacher.getUserRef().toUpperCase());
         return teacherDAO.addTeacher(teacher);
     }
@@ -73,6 +99,7 @@ public class TeacherServiceImpl implements TeacherService {
             throw new IllegalRequestException("Teachers attributes must not be null except the firstname");
         }
         Teacher updatedTeacher = teacherDAO.integralUpdateTeacher(teacherRef.toUpperCase(), teacher);
+
         if(updatedTeacher == null) {
             throw new InternalException("Teacher updated failed");
         }

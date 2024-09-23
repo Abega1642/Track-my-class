@@ -1,5 +1,4 @@
 package dev.razafindratelo.trackmyclass.services.studentServices;
-
 import dev.razafindratelo.trackmyclass.entity.users.Student;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -10,6 +9,8 @@ public interface StudentService {
     Student findStudentById(String std);
 
     List<Student> findAllStudents();
+
+    String studentRefGenerator(String level);
 
     List<Student> findAllStudentsByLevelYear(String levelYear);
 
@@ -35,14 +36,13 @@ public interface StudentService {
 
     List<String> filterPresentStdsByGroup(List<String> missingSTDs, String group);
 
-    Student insertStudent(Student student);
+    Student addStudent(Student student);
 
-    Student deleteStudent(String std);
+    Student deleteStudentByStudentRef(String std);
 
     Student updateStudentIntegrally(String std, Student student);
 
     Student updateStudentPartially(String std, Student student) throws NoSuchFieldException, IllegalAccessException;
 
     List<Student> completeUpgradeStudentsLevels(List<String> excludedSTDs);
-
 }

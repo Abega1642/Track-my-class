@@ -13,6 +13,8 @@ public interface TeacherService {
 
     List<String> findAllTeachersRef();
 
+    String teacherRefGenerator();
+
     Teacher addTeacher(Teacher teacher);
 
     Teacher updateTeacher(String teacherRef, Teacher teacher);

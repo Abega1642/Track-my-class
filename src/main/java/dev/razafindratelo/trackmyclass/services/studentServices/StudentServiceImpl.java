@@ -1,6 +1,8 @@
 package dev.razafindratelo.trackmyclass.services.studentServices;
 
+import dev.razafindratelo.trackmyclass.dao.GroupAndLevelDAO;
 import dev.razafindratelo.trackmyclass.dao.StudentDAO;
+import dev.razafindratelo.trackmyclass.dao.repository.DBConnection;
 import dev.razafindratelo.trackmyclass.entity.matchers.LevelGroupMatcher;
 import dev.razafindratelo.trackmyclass.entity.mergers.StudentMerger;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
@@ -10,9 +12,12 @@ import dev.razafindratelo.trackmyclass.exceptionHandler.IllegalRequestException;
 import dev.razafindratelo.trackmyclass.exceptionHandler.ResourceDuplicatedException;
 import dev.razafindratelo.trackmyclass.exceptionHandler.ResourceNotFoundException;
 import dev.razafindratelo.trackmyclass.services.groupAndLevelServices.GroupAndLevelService;
+import dev.razafindratelo.trackmyclass.services.groupAndLevelServices.GroupAndLevelServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,6 +42,25 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Student> findAllStudents() {
         return studentDAO.getAllStudent();
+    }
+
+    @Override
+    public String studentRefGenerator(String level) {
+        LocalDateTime now = LocalDateTime.now();
+        String year = String.valueOf(now.getYear()).substring(2);
+
+        if (findAllStudentRefByLevelYear(level).isEmpty()) {
+            return "STD"+year+"001";
+        } else {
+            String corRefs = findAllStudentRefByLevelYear(level)
+                    .stream()
+                    .sorted()
+                    .toList()
+                    .getLast();
+            int number = Integer.parseInt(corRefs.substring(3, 8)) + 1;
+
+            return corRefs.substring(0, 3) + number;
+        }
     }
 
     @Override
@@ -106,30 +130,35 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student insertStudent(Student student) {
+    public Student addStudent(Student student) {
         List<String> stds = studentDAO.getAllStudentRef();
 
-        if (stds.contains(student.getUserRef())) {
+        if(student == null) {
+            throw new IllegalRequestException("Student must not be null");
+        }
+
+        if (stds.contains(student.getUserRef()))
             throw new ResourceDuplicatedException("This student already exists");
-        } else if (
-                student.getUserRef() == null
-                        || student.getLastName() == null
-                        || student.getEmail() == null
-                        || student.getLevel() == null
-                        || student.getGroup() == null
-                        || student.getPhoneNumber() == null
-        ) {
+
+        if (student.getLastName() == null || student.getEmail() == null
+            || student.getLevel() == null || student.getGroup() == null
+            || student.getPhoneNumber() == null
+        )
             throw new IllegalRequestException("Student attributes must not be null");
 
-        } else if(groupAndLevelService.checkLevelAndGroupMap(student.getGroup(), student.getLevel())) {
+        if (student.getUserRef() == null || student.getUserRef().length() != 8
+           || !student.getUserRef().substring(0,3).equalsIgnoreCase("STD")
+        )
+            student.setUserRef(studentRefGenerator(student.getLevel().toString()));
+
+        if (groupAndLevelService.checkLevelAndGroupMap(student.getGroup(), student.getLevel()))
             return studentDAO.addStudent(student);
-        } else {
-            throw new IllegalRequestException("Please check your student request body fields");
-        }
+
+        throw new IllegalRequestException("Please check your student request body fields");
     }
 
     @Override
-    public Student deleteStudent(String std) {
+    public Student deleteStudentByStudentRef(String std) {
         if(std == null) {
             throw new IllegalRequestException("STD must not be null");
         }
@@ -165,9 +194,9 @@ public class StudentServiceImpl implements StudentService {
     public Student updateStudentPartially(String std, Student student) {
 
         Student studentToBeUpdated = findStudentById(std);
-        if(student == null) {
+        if(student == null)
             return studentToBeUpdated;
-        }
+
         studentMerger.mergeFields(student, studentToBeUpdated);
 
         return studentDAO.integralUpdateStudent(std, studentToBeUpdated);
