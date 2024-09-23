@@ -25,7 +25,7 @@ public class StudentController {
 
     @PostMapping("/student/add")
     public ResponseEntity<Student> addStudent(@RequestBody Student student) {
-        Student addedStudent = studentService.insertStudent(student);
+        Student addedStudent = studentService.addStudent(student);
         return new ResponseEntity<>(addedStudent, HttpStatus.CREATED);
     }
 
@@ -52,6 +52,6 @@ public class StudentController {
 
     @DeleteMapping("/student/delete/{std}")
     public ResponseEntity<Student> deleteStudentBy(@PathVariable("std") String std) {
-        return ResponseEntity.ok(studentService.deleteStudent(std));
+        return ResponseEntity.ok(studentService.deleteStudentByStudentRef(std));
     }
 }
