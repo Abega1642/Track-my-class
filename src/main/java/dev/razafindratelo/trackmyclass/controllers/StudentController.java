@@ -29,6 +29,11 @@ public class StudentController {
         return new ResponseEntity<>(addedStudent, HttpStatus.CREATED);
     }
 
+    @PutMapping("/student/upgrade")
+    public ResponseEntity<List<Student>> upgradeStudentsLevels(@RequestBody List<String> excludedSTDs) {
+        return ResponseEntity.ok(studentService.completeUpgradeStudentsLevels(excludedSTDs));
+    }
+
     @PutMapping("/student/{std}/update")
     public ResponseEntity<Student> updateStudentIntegrally(
             @PathVariable("std") String std,
