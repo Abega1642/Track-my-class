@@ -75,6 +75,7 @@ public class CorDAO {
             PreparedStatement deletion = dbConnection
                     .getConnection()
                     .prepareStatement("DELETE FROM cor WHERE cor_ref = ?");
+
             deletion.setString(1, cor.getCorRef());
 
             deletion.execute();

@@ -1,6 +1,7 @@
 package dev.razafindratelo.trackmyclass.services.corServices;
 
 import dev.razafindratelo.trackmyclass.dao.CorDAO;
+import dev.razafindratelo.trackmyclass.dto.CorDTO;
 import dev.razafindratelo.trackmyclass.entity.cor.Cor;
 import dev.razafindratelo.trackmyclass.entity.course.Course;
 import dev.razafindratelo.trackmyclass.entity.matchers.MissingMatcher;
@@ -27,7 +28,6 @@ public class CorServiceImpl implements CorService {
 
     @Override
     public List<Cor> findAll() {
-        updateCorList();
         return corDAO.getAllCors();
     }
 
@@ -37,18 +37,22 @@ public class CorServiceImpl implements CorService {
         String year = String.valueOf(now.getYear()).substring(2);
 
         if (findAll().isEmpty()) {
+            System.out.println("Emptyone");
             return "COR"+year+"001";
         } else {
-            String corRefs = findAll()
+            List<String> corRefs = findAll()
                     .stream()
-                    .map(cor -> cor.getStudent().getUserRef())
+                    .map(Cor::getCorRef)
                     .sorted()
-                    .toList()
-                    .getLast();
+                    .toList();
 
-            int number = Integer.parseInt(corRefs.substring(3, 8)) + 1;
-
-            return corRefs.substring(0, 3) + number;
+            if (corRefs.isEmpty()) {
+                return "COR"+year+"001";
+            } else {
+                String corRef = corRefs.getLast();
+                int number = Integer.parseInt(corRef.substring(3, 8)) + 1;
+                return corRef.substring(0, 3) + number;
+            }
         }
     }
 
@@ -96,11 +100,16 @@ public class CorServiceImpl implements CorService {
     }
 
     @Override
-    public List<Cor> addCors(List<Cor> cors) {
-        for(Cor cor: cors) {
-            addCor(cor);
+    public List<Cor> addCors(List<CorDTO> cors) {
+        List<Cor> result = new ArrayList<>();
+        for(CorDTO cor: cors) {
+            Student student = studentService.findStudentById(cor.getStd());
+            Cor cr = new Cor(corRefGenerator(), student);
+            System.out.println(cr);
+            Cor addedCor = corDAO.addCor(cr);
+            result.add(addedCor);
         }
-        return cors;
+        return result;
     }
 
     @Override
@@ -121,23 +130,26 @@ public class CorServiceImpl implements CorService {
 
         List<Course> courses = courseService.getAllCourses();
         List<String> STDs = studentService.findAllStudentRef();
+
         List<MissingMatcher> missingByCourse = new ArrayList<>();
 
         for(Course crs : courses) {
             String courseName = crs.getName();
             for (String std: STDs) {
-                missingByCourse.add(missingService.findStudentMissingByCourse(std, courseName, month, year, "n"));
+
+                MissingMatcher ms = missingService.findStudentMissingByCourse(std, courseName, month, year, "n");
+                if (!ms.getAttendances().isEmpty())
+                    missingByCourse.add(ms);
             }
         }
+        List<String> filteredSTDs = missingByCourse.stream().map(missing -> missing.getStudent().getUserRef()).toList();
 
-        List<String> STDsRelatedToCOR = allSTDsToCOR(STDs, missingByCourse);
-        List<Cor> cors = new ArrayList<>();
+        List<String> STDsRelatedToCOR = allSTDsToCOR(filteredSTDs, missingByCourse);
+
+        List<CorDTO> cors = new ArrayList<>();
+
         for(String std: STDsRelatedToCOR) {
-            Student student = studentService.findStudentById(std);
-            cors.add(new Cor(
-                    corRefGenerator(),
-                    student
-            ));
+            cors.add(new CorDTO(null, std));
         }
         return addCors(cors);
     }

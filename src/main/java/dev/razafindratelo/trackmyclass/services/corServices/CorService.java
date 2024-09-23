@@ -1,5 +1,6 @@
 package dev.razafindratelo.trackmyclass.services.corServices;
 
+import dev.razafindratelo.trackmyclass.dto.CorDTO;
 import dev.razafindratelo.trackmyclass.entity.cor.Cor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public interface CorService {
 
     Cor addCor(Cor cor);
 
-    List<Cor> addCors(List<Cor> cors);
+    List<Cor> addCors(List<CorDTO> cors);
 
     Cor deleteCor(String corRef);
 
