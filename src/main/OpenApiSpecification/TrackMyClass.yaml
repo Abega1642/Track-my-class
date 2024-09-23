@@ -58,6 +58,31 @@ paths:
               schema:
                 type: object
                 $ref: "#/components/schemas/Student"
+  /student/upgrade:
+    put:
+      tags:
+        - Student
+      summary: upgrade groups & students to next level year
+      description: "Upgrade every group to next level year and upgrade every student 
+      who is not in the exclude list provided in request body"
+      operationId: upgrade
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/parameters/std"
+              example: [ "STD23550", "STD2378895" ]
+      responses:
+        200:
+          description: list of all students that have been upgraded
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Student"
 
   /student/{std}/update:
     put:
@@ -536,31 +561,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/level"
-  /student/upgrade:
-    put:
-      tags:
-        - Group and Level
-      summary: upgrade groups & students to next level year
-      description: "Upgrade every group to next level year and upgrade every student 
-      who is not in the exclude list provided in request body"
-      operationId: upgrade
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: "#/components/parameters/std"
-              example: ["STD23550", "STD2378895"]
-      responses:
-        200:
-          description: list of all students that have been upgraded
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Student"
 
 components:
   parameters:
