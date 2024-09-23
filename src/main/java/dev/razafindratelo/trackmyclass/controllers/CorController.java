@@ -1,5 +1,6 @@
 package dev.razafindratelo.trackmyclass.controllers;
 
+import dev.razafindratelo.trackmyclass.dto.CorDTO;
 import dev.razafindratelo.trackmyclass.entity.cor.Cor;
 import dev.razafindratelo.trackmyclass.services.corServices.CorService;
 import lombok.AllArgsConstructor;
@@ -19,17 +20,23 @@ public class CorController {
         return ResponseEntity.ok(corService.findAll());
     }
 
-    @GetMapping("student/CORs")
-    public ResponseEntity<List<Cor>> getAllStudentsCors(@RequestParam("std") String std) {
+    @GetMapping("/COR/student/{std}")
+    public ResponseEntity<List<Cor>> getAllStudentsCors(@PathVariable("std") String std) {
         return ResponseEntity.ok(corService.findByStudentRef(std));
     }
 
     @PostMapping("/COR/add")
-    public ResponseEntity<List<Cor>> addCor(@RequestBody List<Cor> cors) {
+    public ResponseEntity<List<Cor>> addCor(@RequestBody List<CorDTO> cors) {
         return new ResponseEntity<>(
                 corService.addCors(cors),
                 HttpStatus.CREATED
         );
+    }
+
+    @PutMapping("/COR/update")
+    public ResponseEntity<List<Cor>> updateCor() {
+        corService.updateCorList();
+        return getAllCors();
     }
 
     @DeleteMapping("/COR/delete/{corRef}")
