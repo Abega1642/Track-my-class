@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -52,5 +51,10 @@ public class CourseController {
     ) throws NoSuchFieldException, IllegalAccessException {
 
         return ResponseEntity.ok(courseService.updateCoursePartially(courseName, course));
+    }
+
+    @DeleteMapping("/course/delete/{courseName}")
+    public ResponseEntity<Course> deleteCourse(@PathVariable("courseName") String courseName) {
+        return ResponseEntity.ok(courseService.deleteCourse(courseName));
     }
 }
