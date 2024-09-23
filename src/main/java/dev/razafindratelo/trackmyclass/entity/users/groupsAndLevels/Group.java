@@ -1,4 +1,4 @@
-package dev.razafindratelo.trackmyclass.entity.users.enums;
+package dev.razafindratelo.trackmyclass.entity.users.groupsAndLevels;
 
 import lombok.Getter;
 

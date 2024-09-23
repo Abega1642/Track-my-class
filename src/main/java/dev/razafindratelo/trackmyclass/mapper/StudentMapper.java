@@ -1,8 +1,8 @@
 package dev.razafindratelo.trackmyclass.mapper;
 
 import dev.razafindratelo.trackmyclass.entity.users.Student;
-import dev.razafindratelo.trackmyclass.entity.users.enums.Group;
-import dev.razafindratelo.trackmyclass.entity.users.enums.Level;
+import dev.razafindratelo.trackmyclass.entity.users.groupsAndLevels.Group;
+import dev.razafindratelo.trackmyclass.entity.users.groupsAndLevels.Level;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

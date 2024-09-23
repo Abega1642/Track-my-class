@@ -1,7 +1,7 @@
 package dev.razafindratelo.trackmyclass.entity.users;
 
-import dev.razafindratelo.trackmyclass.entity.users.enums.Group;
-import dev.razafindratelo.trackmyclass.entity.users.enums.Level;
+import dev.razafindratelo.trackmyclass.entity.users.groupsAndLevels.Group;
+import dev.razafindratelo.trackmyclass.entity.users.groupsAndLevels.Level;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

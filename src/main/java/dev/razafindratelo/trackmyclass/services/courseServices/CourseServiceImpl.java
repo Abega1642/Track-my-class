@@ -3,7 +3,7 @@ package dev.razafindratelo.trackmyclass.services.courseServices;
 import dev.razafindratelo.trackmyclass.dao.CourseDAO;
 import dev.razafindratelo.trackmyclass.entity.course.Course;
 import dev.razafindratelo.trackmyclass.entity.mergers.CourseMerger;
-import dev.razafindratelo.trackmyclass.entity.users.enums.Level;
+import dev.razafindratelo.trackmyclass.entity.users.groupsAndLevels.Level;
 import dev.razafindratelo.trackmyclass.exceptionHandler.IllegalRequestException;
 import dev.razafindratelo.trackmyclass.exceptionHandler.ResourceDuplicatedException;
 import lombok.AllArgsConstructor;

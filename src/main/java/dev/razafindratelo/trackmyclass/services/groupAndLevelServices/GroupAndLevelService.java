@@ -1,8 +1,8 @@
 package dev.razafindratelo.trackmyclass.services.groupAndLevelServices;
 
 import dev.razafindratelo.trackmyclass.entity.matchers.LevelGroupMatcher;
-import dev.razafindratelo.trackmyclass.entity.users.enums.Group;
-import dev.razafindratelo.trackmyclass.entity.users.enums.Level;
+import dev.razafindratelo.trackmyclass.entity.users.groupsAndLevels.Group;
+import dev.razafindratelo.trackmyclass.entity.users.groupsAndLevels.Level;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

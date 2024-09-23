@@ -1,6 +1,6 @@
 package dev.razafindratelo.trackmyclass.dto;
 
-import dev.razafindratelo.trackmyclass.entity.users.enums.Group;
+import dev.razafindratelo.trackmyclass.entity.users.groupsAndLevels.Group;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;

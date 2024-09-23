@@ -2,8 +2,8 @@ package dev.razafindratelo.trackmyclass.dao;
 
 import dev.razafindratelo.trackmyclass.dao.repository.DBConnection;
 import dev.razafindratelo.trackmyclass.entity.matchers.LevelGroupMatcher;
-import dev.razafindratelo.trackmyclass.entity.users.enums.Group;
-import dev.razafindratelo.trackmyclass.entity.users.enums.Level;
+import dev.razafindratelo.trackmyclass.entity.users.groupsAndLevels.Group;
+import dev.razafindratelo.trackmyclass.entity.users.groupsAndLevels.Level;
 import dev.razafindratelo.trackmyclass.exceptionHandler.InternalException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;

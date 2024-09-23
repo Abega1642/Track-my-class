@@ -1,13 +1,11 @@
 package dev.razafindratelo.trackmyclass.services.studentServices;
 
-import dev.razafindratelo.trackmyclass.dao.GroupAndLevelDAO;
 import dev.razafindratelo.trackmyclass.dao.StudentDAO;
-import dev.razafindratelo.trackmyclass.dao.repository.DBConnection;
 import dev.razafindratelo.trackmyclass.entity.matchers.LevelGroupMatcher;
 import dev.razafindratelo.trackmyclass.entity.mergers.StudentMerger;
 import dev.razafindratelo.trackmyclass.entity.users.Student;
-import dev.razafindratelo.trackmyclass.entity.users.enums.Group;
-import dev.razafindratelo.trackmyclass.entity.users.enums.Level;
+import dev.razafindratelo.trackmyclass.entity.users.groupsAndLevels.Group;
+import dev.razafindratelo.trackmyclass.entity.users.groupsAndLevels.Level;
 import dev.razafindratelo.trackmyclass.exceptionHandler.IllegalRequestException;
 import dev.razafindratelo.trackmyclass.exceptionHandler.ResourceDuplicatedException;
 import dev.razafindratelo.trackmyclass.exceptionHandler.ResourceNotFoundException;

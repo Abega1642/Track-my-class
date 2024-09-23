@@ -1,8 +1,8 @@
 package dev.razafindratelo.trackmyclass.controllers;
 
 import dev.razafindratelo.trackmyclass.entity.matchers.LevelGroupMatcher;
-import dev.razafindratelo.trackmyclass.entity.users.enums.Group;
-import dev.razafindratelo.trackmyclass.entity.users.enums.Level;
+import dev.razafindratelo.trackmyclass.entity.users.groupsAndLevels.Group;
+import dev.razafindratelo.trackmyclass.entity.users.groupsAndLevels.Level;
 import dev.razafindratelo.trackmyclass.services.groupAndLevelServices.GroupAndLevelService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

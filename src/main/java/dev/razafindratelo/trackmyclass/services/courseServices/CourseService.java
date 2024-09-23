@@ -1,7 +1,7 @@
 package dev.razafindratelo.trackmyclass.services.courseServices;
 
 import dev.razafindratelo.trackmyclass.entity.course.Course;
-import dev.razafindratelo.trackmyclass.entity.users.enums.Level;
+import dev.razafindratelo.trackmyclass.entity.users.groupsAndLevels.Level;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
