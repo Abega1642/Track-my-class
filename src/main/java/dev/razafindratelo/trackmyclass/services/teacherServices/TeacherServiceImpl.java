@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -59,11 +60,7 @@ public class TeacherServiceImpl implements TeacherService {
 
         int number = Integer.parseInt(corRefs.substring(3, 8)) + 1;
 
-        if (!corRefs.substring(3, 5).equals(year)) {
-            return "TCH"+year+"001";
-        }
-
-        return corRefs.substring(0, 3) + number;
+        return (!corRefs.substring(3, 5).equals(year)) ? "TCH"+year+"001" : corRefs.substring(0, 3) + number;
     }
 
     @Override
@@ -83,8 +80,17 @@ public class TeacherServiceImpl implements TeacherService {
             teacher.setUserRef(teacherRefGenerator());
         }
 
-        teacher.setUserRef(teacher.getUserRef().toUpperCase());
         return teacherDAO.addTeacher(teacher);
+    }
+
+    @Override
+    public List<Teacher> addTeachers(List<Teacher> teachers) {
+        List<Teacher> addedTeachers = new ArrayList<>();
+        for(Teacher tch : teachers) {
+            Teacher addedTeacher = addTeacher(tch);
+            addedTeachers.add(addedTeacher);
+        }
+        return addedTeachers;
     }
 
     @Override

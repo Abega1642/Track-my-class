@@ -12,12 +12,11 @@ import dev.razafindratelo.trackmyclass.exceptionHandler.IllegalRequestException;
 import dev.razafindratelo.trackmyclass.exceptionHandler.ResourceDuplicatedException;
 import dev.razafindratelo.trackmyclass.exceptionHandler.ResourceNotFoundException;
 import dev.razafindratelo.trackmyclass.services.groupAndLevelServices.GroupAndLevelService;
-import dev.razafindratelo.trackmyclass.services.groupAndLevelServices.GroupAndLevelServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -58,8 +57,7 @@ public class StudentServiceImpl implements StudentService {
                     .toList()
                     .getLast();
             int number = Integer.parseInt(corRefs.substring(3, 8)) + 1;
-
-            return corRefs.substring(0, 3) + number;
+            return (!corRefs.substring(3, 5).equals(year)) ? "STD"+year+"001" : corRefs.substring(0, 3) + number;
         }
     }
 
@@ -151,10 +149,20 @@ public class StudentServiceImpl implements StudentService {
         )
             student.setUserRef(studentRefGenerator(student.getLevel().toString()));
 
-        if (groupAndLevelService.checkLevelAndGroupMap(student.getGroup(), student.getLevel()))
-            return studentDAO.addStudent(student);
+        if (!groupAndLevelService.checkLevelAndGroupMap(student.getGroup(), student.getLevel()))
+            throw new IllegalRequestException("Please check your student level and group (They don't match each other");
 
-        throw new IllegalRequestException("Please check your student request body fields");
+        return studentDAO.addStudent(student);
+    }
+
+    @Override
+    public List<Student> addStudents(List<Student> students) {
+        List<Student> addedStudents = new ArrayList<>();
+        for(Student std : students) {
+            Student addedStudent = addStudent(std);
+            addedStudents.add(addedStudent);
+        }
+        return addedStudents;
     }
 
     @Override

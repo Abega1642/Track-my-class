@@ -3,6 +3,7 @@ package dev.razafindratelo.trackmyclass.controllers;
 import dev.razafindratelo.trackmyclass.entity.users.Teacher;
 import dev.razafindratelo.trackmyclass.services.teacherServices.TeacherService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -24,8 +25,8 @@ public class TeacherController {
     }
 
     @PostMapping("/teacher/add")
-    public ResponseEntity<Teacher> addTeacher(@RequestBody Teacher teacher) {
-        return ResponseEntity.ok(teacherService.addTeacher(teacher));
+    public ResponseEntity<List<Teacher>> addTeacher(@RequestBody List<Teacher> teachers) {
+        return new ResponseEntity<>(teacherService.addTeachers(teachers), HttpStatus.CREATED);
     }
 
     @PutMapping("/teacher/{teacherRef}/update")

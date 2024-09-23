@@ -1,5 +1,6 @@
 package dev.razafindratelo.trackmyclass.services.teacherServices;
 
+import dev.razafindratelo.trackmyclass.entity.users.Student;
 import dev.razafindratelo.trackmyclass.entity.users.Teacher;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,8 @@ public interface TeacherService {
     String teacherRefGenerator();
 
     Teacher addTeacher(Teacher teacher);
+
+    List<Teacher> addTeachers(List<Teacher> teachers);
 
     Teacher updateTeacher(String teacherRef, Teacher teacher);
 

@@ -24,8 +24,8 @@ public class StudentController {
     }
 
     @PostMapping("/student/add")
-    public ResponseEntity<Student> addStudent(@RequestBody Student student) {
-        Student addedStudent = studentService.addStudent(student);
+    public ResponseEntity<List<Student>> addStudent(@RequestBody List<Student> students) {
+        List<Student> addedStudent = studentService.addStudents(students);
         return new ResponseEntity<>(addedStudent, HttpStatus.CREATED);
     }
 

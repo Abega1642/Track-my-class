@@ -38,6 +38,8 @@ public interface StudentService {
 
     Student addStudent(Student student);
 
+    List<Student> addStudents(List<Student> students);
+
     Student deleteStudentByStudentRef(String std);
 
     Student updateStudentIntegrally(String std, Student student);
